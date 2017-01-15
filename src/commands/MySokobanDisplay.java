@@ -21,10 +21,10 @@ public class MySokobanDisplay implements Displayer {
             System.out.println();
 
         }
-
+//hi
     }
 
-    public Level getLvl() {
+    private Level getLvl() {
         return lvl;
     }
 
