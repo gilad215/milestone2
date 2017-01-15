@@ -15,7 +15,7 @@ public class MoveLevelCommand implements Command {
     private Policy policy;
     private String direction;
 
-    MoveLevelCommand(Level l, String dir, ArrayList<Point> goals)
+    public MoveLevelCommand(Level l, String dir, ArrayList<Point> goals)
     {
         lvl=new Level();
         Goals=new ArrayList<Point>();

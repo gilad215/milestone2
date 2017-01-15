@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class MySokobanDisplay implements Displayer {
     private Level lvl;
-    MySokobanDisplay(Level l)
+    public MySokobanDisplay(Level l)
     {
         this.lvl=l;
     }

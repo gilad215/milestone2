@@ -4,11 +4,13 @@ import levels.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MySokobanLoader implements Loader {
     private HashMap<String, LevelLoader> fileTypes;
-    private Level lvl;
+    private ArrayList<Point> Goals;
+    private Level lvl=null;
     private String pathToFile;
 
 

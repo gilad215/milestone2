@@ -33,4 +33,5 @@ public class Level implements Serializable{
     public boolean isEmpty(){
         return board.isEmpty();
     }
+
 }

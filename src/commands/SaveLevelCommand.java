@@ -14,7 +14,7 @@ public class SaveLevelCommand implements Command {
     private String p;
     private Saver saver;
 
-    SaveLevelCommand(Level l, String path)
+    public SaveLevelCommand(Level l, String path)
     {
         setP(path);
         setLvl(l);
