@@ -26,9 +26,11 @@ public class MySokobanPolicy implements Policy {
     }
 
     public void Move(String move) {
+        System.out.println("Move to be made:"+move);
         int Y = lvl.getBoard().size();
         int playerX = -1;
         int playerY = lvl.getBoard().size();
+        System.out.println("Board Number of Rows:"+lvl.getBoard().size());
 
 
         for (int i = 0; i < Y; i++) {
@@ -275,6 +277,8 @@ public class MySokobanPolicy implements Policy {
             }
     private boolean isGoal(Point p) {
         for (Point g:Goals) {
+            if(Goals.isEmpty()) System.out.println("Goals is empty!");
+            else System.out.println("Goals amount"+Goals.size());
             if(g.getPoint().equals(p.getPoint())) return true;
         }
         return false;}

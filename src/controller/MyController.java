@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 
@@ -21,6 +22,7 @@ public class MyController implements Controller {
     public MyController(View v, Model m) {
         ui = v;
         model = m;
+        queue=new ArrayBlockingQueue<Command>(10);
         commands=new HashMap<String,Command>();
         commands.put("LOAD",new LoadLevelCommand());
         commands.put("SAVE",new SaveLevelCommand());
@@ -56,11 +58,40 @@ public class MyController implements Controller {
                 {
                     try {
                         queue.add(new LoadLevelCommand());
+                        LinkedList<String> linkedList= new LinkedList<>();
+                        LinkedList<String> mlinkedList= new LinkedList<>();
+                        LinkedList<String> leftlinkedList= new LinkedList<>();
+
+
+                        linkedList.add("./extras/level2.txt");
+                        mlinkedList.add("right");
+                        leftlinkedList.add("left");
+                        System.out.println(queue.size());
                         Command c=queue.take();
+                        c.setParams(linkedList);
                         c.run();
                         model.setLevel(c.getLvl());
+                        if(!model.getLevel().getBoard().isEmpty()) System.out.println("board isnt empty");
                         Displayer d = new MySokobanDisplay(model.getLevel());
                         d.display();
+                        System.out.println("Load finished, Queue elements: "+queue.size());
+                        queue.add(new MoveLevelCommand());
+                        System.out.println("Added Move Command, Queue elements: "+queue.size());
+                        c=queue.take();
+                        c.setParams(mlinkedList);
+                        c.setLvl(model.getLevel());
+                        c.run();
+                        model.setLevel(c.getLvl());
+                        d.display();
+                        queue.add(new MoveLevelCommand());
+                        c=queue.take();
+                        c.setParams(leftlinkedList);
+                        c.setLvl(model.getLevel());
+                        c.run();
+                        model.setLevel(c.getLvl());
+                        d.display();
+
+
 
                     } catch (InterruptedException e) {
                         e.printStackTrace();

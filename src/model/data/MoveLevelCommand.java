@@ -16,7 +16,9 @@ public class MoveLevelCommand implements Command {
 
     public MoveLevelCommand(){
         lvl=new Level();
-        Goals=new ArrayList<Point>();}
+        Goals=new ArrayList<Point>();
+
+    }
     public MoveLevelCommand(Level l, String dir)
     {
         lvl=new Level();
@@ -27,6 +29,7 @@ public class MoveLevelCommand implements Command {
     }
 
     public void run() {
+        if(Goals==null) System.out.println("GOAL IS NULL");
         policy=new MySokobanPolicy(lvl,Goals);
         policy.Move(direction);
         if(policy.isFinished()) System.out.println("Level Finished! :)");
@@ -53,6 +56,7 @@ public class MoveLevelCommand implements Command {
 
     public void setLvl(Level l) {
         this.lvl = l;
+        Goals=l.getGoals();
     }
 
     public boolean isFinished(){return policy.isFinished();}
