@@ -1,7 +1,5 @@
-package util;
+package model.data;
 
-
-import levels.Level;
 
 import java.io.*;
 import java.util.ArrayList;

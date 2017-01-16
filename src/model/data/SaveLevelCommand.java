@@ -1,19 +1,13 @@
-package commands;
+package model.data;
 
-import util.OBJUtil;
-import util.LevelSaver;
-import util.TXTUtil;
-import util.XMLUtil;
-import levels.Level;
-
-import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedList;
 
 public class SaveLevelCommand implements Command {
     private Level lvl;
     private String p;
     private Saver saver;
 
+    public SaveLevelCommand(){}
     public SaveLevelCommand(Level l, String path)
     {
         setP(path);
@@ -21,17 +15,22 @@ public class SaveLevelCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public void run() {
         saver=new MySokobanSaver(getLvl(),getP());
         saver.save();
+    }
+
+    @Override
+    public void setParams(LinkedList<String> linkedList) {
+
     }
 
     public Level getLvl() {
         return lvl;
     }
 
-    public void setLvl(Level lvl) {
-        this.lvl = lvl;
+    public void setLvl(Level l) {
+        this.lvl = l;
     }
 
     public String getP() {

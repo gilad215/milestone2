@@ -1,14 +1,14 @@
-package commands;
+package model.policy;
 
-import levels.Level;
-import levels.Point;
+import model.data.Level;
+import model.data.Point;
 import java.util.ArrayList;
 
 public class MySokobanPolicy implements Policy {
     private ArrayList<Point> Goals;
     private Level lvl;
 
-    MySokobanPolicy(Level l, ArrayList<Point> g)
+    public MySokobanPolicy(Level l, ArrayList<Point> g)
     {
         this.lvl=l;
         Goals = new ArrayList<Point>();
@@ -47,7 +47,7 @@ public class MySokobanPolicy implements Policy {
 
                 switch (move) {
                     case ("up"): {
-                        System.out.println("Moving Up...");
+                        //System.out.println("Moving Up...");
                         char DesiredSpot = lvl.getBoard().get(playerY - 1).get(playerX);
                         switch (DesiredSpot) {
                             case ('#'):
@@ -102,7 +102,7 @@ public class MySokobanPolicy implements Policy {
                         break;
                     }
                     case ("down"): {
-                        System.out.println("Moving Down...");
+                        //System.out.println("Moving Down...");
                         char DesiredSpot = lvl.getBoard().get(playerY + 1).get(playerX);
                         switch (DesiredSpot) {
                             case ('#'):
@@ -159,7 +159,7 @@ public class MySokobanPolicy implements Policy {
                     }
                     break;
                     case ("right"): {
-                        System.out.println("Moving Right...");
+                        //System.out.println("Moving Right...");
                         char DesiredSpot = lvl.getBoard().get(playerY).get(playerX + 1);
                         switch (DesiredSpot) {
                             case ('#'):
@@ -216,7 +216,7 @@ public class MySokobanPolicy implements Policy {
                         break;
                     }
                     case ("left"): {
-                        System.out.println("Moving Left...");
+                        //System.out.println("Moving Left...");
                         char DesiredSpot = lvl.getBoard().get(playerY).get(playerX - 1);
                         switch (DesiredSpot) {
                             case ('#'):

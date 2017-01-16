@@ -1,21 +1,25 @@
-package levels;
+package model.data;
 
-
-import util.XMLUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-public class MyXMLLevelLoader implements LevelLoader {
+
+public class MyObjectLevelLoader implements LevelLoader {
     @Override
     public Level loadLevel(InputStream input) {
+
         Level l = null;
-        XMLUtil XMLLoad=new XMLUtil();
+        OBJUtil Serialize=new OBJUtil();
         try {
-            l =(Level)XMLLoad.decode(input);
+            l = (Level) Serialize.deserialize(input);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return l;
     }
 }
+
+
+
+

@@ -1,6 +1,5 @@
-package commands;
+package model.data;
 //by gladis
-import levels.*;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -39,7 +38,7 @@ public class CLI {
                         break;
                     }
                     load =new LoadLevelCommand(inputs[1]);
-                    load.execute();
+                    load.run();
                     setLevel(load.getLvl());
                     getGoals();
                     break;
@@ -51,7 +50,7 @@ public class CLI {
                         return;
                     }
                     display =new DisplayLevelCommand(getLevel());
-                    display.execute();
+                    display.run();
                     }
                     break;
 
@@ -63,21 +62,20 @@ public class CLI {
                         break;
                     }
                     save=new SaveLevelCommand(getLevel(),inputs[1]);
-                    save.execute();
+                    save.run();
 
                 break;
                 }
                 case("MOVE"): {
-                    move = new MoveLevelCommand(getLevel(), inputs[1], Goals);
-                    move.execute();
-                    setLevel(move.getLvl());
-                    if(move.isFinished()) display.execute();
-
+                    //move = new MoveLevelCommand(getLevel(), inputs[1], Goals);
+                    //move.run();
+                   // setLevel(move.getLvl());
+                   // if(move.isFinished()) display.run();
                     break;
                 }
                 case("EXIT"):
                     exit = new ExitCommand();
-                    exit.execute();
+                    exit.run();
             }
              input=scanner.nextLine();
              inputs=input.split("\\s+");

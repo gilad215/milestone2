@@ -1,8 +1,7 @@
-package levels;
+package model.data;
 
 
 //import com.sun.deploy.util.ArrayUtil;
-import util.TXTUtil;
 
 
 import java.io.InputStream;

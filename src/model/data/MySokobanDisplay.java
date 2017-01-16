@@ -1,6 +1,4 @@
-package commands;
-
-import levels.Level;
+package model.data;
 
 import java.util.ArrayList;
 

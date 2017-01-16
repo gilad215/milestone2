@@ -1,6 +1,6 @@
-package commands;
+package model.data;
 
-import levels.Level;
+import java.util.LinkedList;
 
 public class DisplayLevelCommand implements Command {
     private Level lvl;
@@ -11,18 +11,23 @@ public class DisplayLevelCommand implements Command {
         this.lvl=l;
     }
     @Override
-    public void execute() {
+    public void run() {
         {
             d=new MySokobanDisplay(getLvl());
             d.display();
         }
     }
 
+    @Override
+    public void setParams(LinkedList<String> linkedList) {
+
+    }
+
     public Level getLvl() {
         return lvl;
     }
 
-    public void setLvl(Level lvl) {
-        this.lvl = lvl;
+    public void setLvl(Level l) {
+        this.lvl = l;
     }
 }

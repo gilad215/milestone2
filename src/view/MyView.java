@@ -1,10 +1,9 @@
 package view;
 
-import commands.Displayer;
-import commands.MySokobanDisplay;
-import levels.Level;
+import model.data.Displayer;
+import model.data.MySokobanDisplay;
+import model.data.Level;
 
-import javax.swing.text.View;
 import java.util.Observable;
 import java.util.Scanner;
 
@@ -36,4 +35,8 @@ public class MyView extends Observable implements view.View{
         return userinput;
     }
 
+    @Override
+    public void notifyObservers() {
+        super.notifyObservers();
+    }
 }

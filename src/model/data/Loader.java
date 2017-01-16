@@ -1,6 +1,6 @@
-package commands;
+package model.data;
 
-import levels.Level;
+import model.data.Level;
 
 public interface Loader {
      void load();

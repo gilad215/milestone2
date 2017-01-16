@@ -1,6 +1,6 @@
 package view;
 
-import levels.Level;
+import model.data.Level;
 
 public interface View {
     void displayData(Level lvl);
