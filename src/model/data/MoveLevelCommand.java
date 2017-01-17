@@ -40,6 +40,7 @@ public class MoveLevelCommand implements Command {
     @Override
     public void setParams(LinkedList<String> linkedList) {
         direction=linkedList.getFirst();
+        System.out.println("DIRECTION OF MOVMENT IS "+direction);
     }
 
     public Policy getPolicy() {

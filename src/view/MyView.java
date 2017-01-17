@@ -7,7 +7,7 @@ import model.data.Level;
 import java.util.Observable;
 import java.util.Scanner;
 
-public class MyView extends Observable implements view.View{
+public class MyView extends View{
     private Displayer displayer;
     String[] userinput;
 

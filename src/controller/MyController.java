@@ -39,9 +39,11 @@ public class MyController implements Controller {
         if (o == ui) {
             LinkedList<String> params = (LinkedList<String>) arg;
             String commandKey = params.removeFirst();
-            Command c = commands.get(commandKey);
+            System.out.println("COMMAND IS:"+commandKey+" PARAMSNOW:"+params.getFirst());
+            Command c = commands.get(commandKey.toUpperCase());
+            //System.out.println("PARAMS ARE:"+params);
             c.setParams(params);
-            c.setLvl(model.getLevel());
+            //c.setLvl(model.getLevel());
             insertCommand(c);
         }
     }
@@ -55,12 +57,43 @@ public class MyController implements Controller {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while(true)
-                {
-
+                Displayer d;
+                LinkedList<String> linkedList= new LinkedList<>();
+                LinkedList<String> rightlinkedlist= new LinkedList<>();
+                LinkedList<String> leftlinkedList= new LinkedList<>();
+                linkedList.add("load");
+                linkedList.add("./extras/level2.txt");
+                rightlinkedlist.add("move");
+                rightlinkedlist.add("right");
+                leftlinkedList.add("move");
+                leftlinkedList.add("left");
+                update(ui,linkedList);
+                update(ui,rightlinkedlist);
+                update(ui,leftlinkedList);
+                for (Command c:queue) {
+                    try {
+                        Command command=queue.take();
+                        if(command.getClass()==new LoadLevelCommand().getClass())
+                        command.run();
+                        else
+                        {
+                            command.setLvl(model.getLevel());
+                            command.run();
+                        }
+                        model.setLevel(command.getLvl());
+                        d=new MySokobanDisplay(model.getLevel());
+                        System.out.println("DISPLAYING:");
+                        d.display();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
                 }
+
+
+
             }
+
         }).start();
     }
 
