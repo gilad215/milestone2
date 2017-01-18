@@ -2,11 +2,13 @@ package model;
 
 import model.data.Level;
 
-public interface Model {
-    void load(String input);
-    void save(String input);
-    void move(String input);
-    void exit();
-    Level getLevel();
-    void setLevel(Level l);
+import java.util.Observable;
+
+public abstract class Model extends Observable {
+    abstract public void load(String input);
+    abstract public void save(String input);
+    abstract public void move(String input);
+    abstract public void exit();
+    abstract public Level getLevel();
+    abstract public void setLevel(Level l);
 }

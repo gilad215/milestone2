@@ -5,7 +5,7 @@ import model.data.*;
 import java.util.ArrayList;
 import java.util.Observable;
 
-public class MyModel extends Observable implements Model {
+public class MyModel extends Model {
     private Level level;
 
     @Override
