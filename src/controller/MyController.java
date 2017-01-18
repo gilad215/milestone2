@@ -4,83 +4,47 @@ import model.Model;
 import model.data.*;
 import view.View;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 import java.util.concurrent.*;
 
-public class MyController implements Controller {
-    private view.View ui;
+public class MyController implements Observer {
+    private View ui;
     private Model model;
+    private Controller controller;
     private HashMap<String,Command> commands;
-    private BlockingQueue<Command> queue;
-    private boolean isStopped=false;
 
     public MyController(View v, Model m) {
         ui = v;
         model = m;
-        queue=new LinkedBlockingQueue<Command>();
-        commands=new HashMap<String,Command>();
-        commands.put("LOAD",new LoadLevelCommand());
+
+        initCommands();
+        controller=new Controller();
+        controller.start();
+    }
+
+    protected void initCommands() {
+        commands = new HashMap<String, Command>();
+        commands.put("MOVE", new MoveLevelCommand(model));
+        commands.put("DISPLAY", new DisplayLevelCommand(model));
+        commands.put("LOAD", new LoadLevelCommand());
         commands.put("SAVE",new SaveLevelCommand());
-        commands.put("MOVE",new MoveLevelCommand());
-        commands.put("EXIT",new ExitCommand());
+
+
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o == model) {
-            ui.displayData(model.getLevel());
+        LinkedList<String> params = (LinkedList<String>) arg;
+        String commandKey = params.removeFirst();
+        Command c = commands.get(commandKey.toUpperCase());
+        if (c == null) {
+            System.out.println("Invalid Command");
+            return;
         }
-        if (o == ui) {
-            LinkedList<String> params = (LinkedList<String>) arg;
-            String commandKey = params.removeFirst();
-            Command c = commands.get(commandKey);
-            c.setParams(params);
-            c.setLvl(model.getLevel());
-            insertCommand(c);
-        }
-    }
-    @Override
-    public void insertCommand(Command c) {
-        queue.add(c);
+        c.setParams(params);
+        controller.insertCommand(c);
     }
 
-    @Override
-    public void start() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while(!isStopped)
-                {
-                    try
-                    {
-                        Command cmd=queue.poll(1, TimeUnit.SECONDS);
-                        if(cmd!=null)
-                        {
-                            if(cmd.getClass()==new LoadLevelCommand().getClass()) cmd.run();
-                            else {
-                                cmd.setLvl(model.getLevel());
-                                cmd.run();
-
-                                }
-                        }
-                    }
-                    catch (InterruptedException e)
-                    {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-        }).start();
-    }
-
-    @Override
-    public void stop() {
-        isStopped=true;
-    }
 
 
     /*public void update(Observable o, Object arg) {

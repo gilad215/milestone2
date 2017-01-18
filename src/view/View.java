@@ -1,11 +1,13 @@
 package view;
 
+import model.data.Command;
 import model.data.Level;
+import model.data.Point;
 
 import java.util.Observable;
 
-public abstract class View extends Observable {
-    abstract public void displayData(Level lvl);
-    abstract public String[] getInput();
-    abstract public void userInput();
+public interface View{
+    void DisplayPosition(Point p);
+    void displayError(Command c);
+    void start();
 }

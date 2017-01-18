@@ -15,7 +15,7 @@ public class LoadLevelCommand implements Command {
     }
 
     @Override
-    public void run() {
+    public void execute() {
         loader=new MySokobanLoader(pathToFile);
         loader.load();
         setLvl(loader.getLvl());

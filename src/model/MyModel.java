@@ -3,6 +3,8 @@ package model;
 import model.data.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Observable;
 
 public class MyModel extends Model {
@@ -11,29 +13,36 @@ public class MyModel extends Model {
     @Override
     public void load(String input) {
         LoadLevelCommand load=new LoadLevelCommand(input);
-        load.run();
+        load.execute();
         this.setLevel(load.getLvl());
+        this.setChanged();
+        //this.notifyObservers();
 
     }
 
     @Override
     public void save(String input) {
         SaveLevelCommand save=new SaveLevelCommand(getLevel(),input);
-        save.run();
+        save.execute();
     }
 
 
     @Override
     public void move(String input) {
-        MoveLevelCommand move=new MoveLevelCommand(getLevel(),input);
-        move.run();
+        MoveLevelCommand move=new MoveLevelCommand();
+        move.execute();
         setLevel(move.getLvl());
+        this.setChanged();
+        List<String> params = new LinkedList<String>();
+        params.add("DISPLAY");
+        this.notifyObservers(params);
+
     }
 
     @Override
     public void exit() {
         ExitCommand e=new ExitCommand();
-        e.run();
+        e.execute();
 
     }
 

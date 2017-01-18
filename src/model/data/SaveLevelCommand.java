@@ -15,7 +15,7 @@ public class SaveLevelCommand implements Command {
     }
 
     @Override
-    public void run() {
+    public void execute() {
         saver=new MySokobanSaver(getLvl(),getP());
         saver.save();
     }

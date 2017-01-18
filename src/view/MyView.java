@@ -1,18 +1,63 @@
 package view;
 
-import model.data.Displayer;
-import model.data.MySokobanDisplay;
-import model.data.Level;
+import model.Model;
+import model.data.*;
 
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Scanner;
 
-public class MyView extends View{
+public class MyView extends Observable implements View{
     private Displayer displayer;
     String[] userinput;
 
     @Override
-    public void displayData(Level lvl) {
+    public void notifyObservers() {
+        super.notifyObservers();
+    }
+
+    @Override
+    public void DisplayPosition(Point p) {
+        System.out.println(p.getPoint());
+
+    }
+
+    @Override
+    public void displayError(Command c) {
+        System.out.println("Error: "+c);
+    }
+
+    @Override
+    public void start() {
+        Scanner scanner = new Scanner(System.in);
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                while (true) {
+                    System.out.print("Enter command: ");
+                    String commandLine = scanner.nextLine();
+
+                    String[] arr = commandLine.split(" ");
+                    LinkedList<String> params = new LinkedList<String>();
+
+                    for (String s: arr) {
+                        params.add(s);
+                    }
+
+                    setChanged();
+                    notifyObservers(params);
+
+                    if (commandLine.equals("exit"))
+                        break;
+                }
+            }
+        });
+        thread.start();
+    }
+}
+
+/*public void displayData(Level lvl) {
         displayer=new MySokobanDisplay(lvl);
         displayer.display();
     }
@@ -29,14 +74,4 @@ public class MyView extends View{
         } //asking for an input if its more than 3 words.
         userinput=inputs;
 
-    }
-    @Override
-    public String[] getInput() {
-        return userinput;
-    }
-
-    @Override
-    public void notifyObservers() {
-        super.notifyObservers();
-    }
-}
+    }*/

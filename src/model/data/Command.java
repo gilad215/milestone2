@@ -2,9 +2,9 @@ package model.data;
 
 import java.util.LinkedList;
 
-public interface Command extends Runnable{
+public interface Command{
     Level getLvl();
-    void run();
+    void execute();
     void setParams(LinkedList<String> linkedList);
     void setLvl(Level l);
 }

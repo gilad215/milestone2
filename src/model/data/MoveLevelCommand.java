@@ -1,5 +1,6 @@
 package model.data;
 
+import model.Model;
 import model.policy.MySokobanPolicy;
 import model.policy.Policy;
 
@@ -19,20 +20,19 @@ public class MoveLevelCommand implements Command {
         Goals=new ArrayList<Point>();
 
     }
-    public MoveLevelCommand(Level l, String dir)
+    public MoveLevelCommand(Model m)
     {
-        lvl=new Level();
+        lvl=m.getLevel();
         Goals=new ArrayList<Point>();
-        this.lvl=l;
-        this.Goals=l.getGoals();
-        this.direction=dir;
+        //Goals=lvl.getGoals();
     }
 
-    public void run() {
+    public void execute() {
+        Goals=lvl.getGoals();
         if(Goals==null) System.out.println("GOAL IS NULL");
         policy=new MySokobanPolicy(lvl,Goals);
         policy.Move(direction);
-        if(policy.isFinished()) System.out.println("Level Finished! :)");
+        //if(policy.isFinished()) System.out.println("Level Finished! :)");
 
 
     }
