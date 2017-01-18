@@ -8,17 +8,14 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.*;
 
 public class MyController implements Controller {
     private view.View ui;
     private Model model;
     private HashMap<String,Command> commands;
     private BlockingQueue<Command> queue;
-    String args;
+    private boolean isStopped=false;
 
     public MyController(View v, Model m) {
         ui = v;
@@ -55,9 +52,25 @@ public class MyController implements Controller {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while(true)
+                while(!isStopped)
                 {
+                    try
+                    {
+                        Command cmd=queue.poll(1, TimeUnit.SECONDS);
+                        if(cmd!=null)
+                        {
+                            if(cmd.getClass()==new LoadLevelCommand().getClass()) cmd.run();
+                            else {
+                                cmd.setLvl(model.getLevel());
+                                cmd.run();
 
+                                }
+                        }
+                    }
+                    catch (InterruptedException e)
+                    {
+                        e.printStackTrace();
+                    }
 
                 }
             }
@@ -66,7 +79,7 @@ public class MyController implements Controller {
 
     @Override
     public void stop() {
-
+        isStopped=true;
     }
 
 
