@@ -23,6 +23,7 @@ public class MyModel extends Observable implements Model {
         loader=new MySokobanLoader(input);
         loader.load();
         lvl=loader.getLvl();
+        if(lvl==null) return;
         lvl.setGoals();
         this.setChanged();
         List<String> params = new LinkedList<String>();
@@ -44,6 +45,10 @@ public class MyModel extends Observable implements Model {
 
     @Override
     public void move(String direction) {
+        if(lvl==null) {
+            System.out.println("No Level Loaded!");
+            return;
+        }
         policy=new MySokobanPolicy(lvl);
         policy.Move(direction);
         lvl=policy.getLvl();

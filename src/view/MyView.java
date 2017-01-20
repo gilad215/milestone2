@@ -51,7 +51,7 @@ public class MyView extends Observable implements View {
             public void run() {
                 String commandLine = "";
                 do {
-                    writer.print("Enter command: ");
+                    writer.print("Enter command: \n");
                     writer.flush();
                     try {
                         commandLine = reader.readLine();
