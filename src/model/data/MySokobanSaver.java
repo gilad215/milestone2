@@ -8,7 +8,7 @@ public class MySokobanSaver implements Saver{
     private Level lvl;
     private String p;
 
-    MySokobanSaver(Level l,String path)
+    public MySokobanSaver(Level l, String path)
     {
             fileTypes= new HashMap<String, LevelSaver>();
             fileTypes.put("txt", new TXTUtil());

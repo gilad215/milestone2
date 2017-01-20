@@ -7,10 +7,53 @@ import model.policy.Policy;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class MoveLevelCommand implements Command {
+public class MoveLevelCommand extends Command {
+    private Model model;
 
 
-    private Level lvl;
+    public MoveLevelCommand(Model m)
+    {
+        this.model=m;
+    }
+
+    @Override
+    public void execute() {
+        String direction=params.get(0);
+        model.move(direction);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*private Level lvl;
     private ArrayList<Point> Goals;
     private Policy policy;
     private String direction;
@@ -61,4 +104,4 @@ public class MoveLevelCommand implements Command {
     }
 
     public boolean isFinished(){return policy.isFinished();}
-}
+}*/

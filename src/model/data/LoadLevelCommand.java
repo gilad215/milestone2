@@ -1,37 +1,22 @@
 package model.data;
 
+import model.Model;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class LoadLevelCommand implements Command {
-    private Level lvl;
-    private String pathToFile;
-    private Loader loader;
+public class LoadLevelCommand extends Command {
+    private Model model;
 
-    public LoadLevelCommand(){}
-    public LoadLevelCommand(String path)
-    {
-        this.pathToFile =path;
+    public LoadLevelCommand(Model model) {
+        this.model = model;
     }
 
     @Override
     public void execute() {
-        loader=new MySokobanLoader(pathToFile);
-        loader.load();
-        setLvl(loader.getLvl());
+        String path = params.get(0);
+        model.load(path);
     }
-
-    @Override
-    public void setParams(LinkedList<String> linkedList) {
-        pathToFile=linkedList.getFirst();
-    }
-
-    public Level getLvl() {
-        return lvl;
-    }
-
-    public void setLvl(Level l) {
-        this.lvl = l;
-    }
-
 }
+
+

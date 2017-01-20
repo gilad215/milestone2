@@ -17,17 +17,18 @@ public class MyController implements Observer {
         ui = v;
         model = m;
 
-        initCommands();
         controller=new Controller();
         controller.start();
+        initCommands();
+
     }
 
     protected void initCommands() {
         commands = new HashMap<String, Command>();
         commands.put("MOVE", new MoveLevelCommand(model));
-        commands.put("DISPLAY", new DisplayLevelCommand(model));
-        commands.put("LOAD", new LoadLevelCommand());
-        commands.put("SAVE",new SaveLevelCommand());
+        commands.put("DISPLAY", new DisplayLevelCommand(model,ui));
+        commands.put("LOAD", new LoadLevelCommand(model));
+        commands.put("SAVE",new SaveLevelCommand(model));
 
 
     }
@@ -38,7 +39,7 @@ public class MyController implements Observer {
         String commandKey = params.removeFirst();
         Command c = commands.get(commandKey.toUpperCase());
         if (c == null) {
-            System.out.println("Invalid Command");
+            ui.displayMessage(c);
             return;
         }
         c.setParams(params);

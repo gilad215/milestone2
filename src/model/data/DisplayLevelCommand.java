@@ -1,35 +1,24 @@
 package model.data;
 
 import model.Model;
+import view.View;
 
 import java.util.LinkedList;
 
-public class DisplayLevelCommand implements Command {
-    private Level lvl;
-    private Displayer d;
+public class DisplayLevelCommand extends Command {
+    private Model model;
+    private View view;
 
-    public DisplayLevelCommand(){}
-    public DisplayLevelCommand(Model l)
-    {
-        this.lvl=l.getLevel();
+    public DisplayLevelCommand(Model model, View view) {
+        this.model = model;
+        this.view = view;
     }
 
-    @Override
-    public void setParams(LinkedList<String> linkedList) {
-
-    }
-
-    public Level getLvl() {
-        return lvl;
-    }
 
     @Override
     public void execute() {
-        d=new MySokobanDisplay(getLvl());
-        d.display();
+        Level level= model.getLvl();
+        view.display(level);
     }
 
-    public void setLvl(Level l) {
-        this.lvl = l;
-    }
 }

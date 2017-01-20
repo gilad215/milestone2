@@ -8,6 +8,7 @@ import java.util.Observable;
 
 public interface View{
     void DisplayPosition(Point p);
-    void displayError(Command c);
+    void displayMessage(Command c);
+    void display(Level l);
     void start();
 }

@@ -1,10 +1,15 @@
 package model.data;
 
 import java.util.LinkedList;
+import java.util.List;
 
-public interface Command{
-    Level getLvl();
-    void execute();
-    void setParams(LinkedList<String> linkedList);
-    void setLvl(Level l);
+public abstract class Command{
+
+    protected List<String> params;
+
+    public void setParams(List<String> params) {
+        this.params = params;
+    }
+
+    public abstract void execute();
 }

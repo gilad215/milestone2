@@ -1,43 +1,19 @@
 package model.data;
 
+import model.Model;
+
 import java.util.LinkedList;
 
-public class SaveLevelCommand implements Command {
-    private Level lvl;
-    private String p;
-    private Saver saver;
+public class SaveLevelCommand extends Command {
+    private Model model;
 
-    public SaveLevelCommand(){}
-    public SaveLevelCommand(Level l, String path)
-    {
-        setP(path);
-        setLvl(l);
+    public SaveLevelCommand(Model m) {
+        this.model = m;
     }
 
     @Override
     public void execute() {
-        saver=new MySokobanSaver(getLvl(),getP());
-        saver.save();
-    }
-
-    @Override
-    public void setParams(LinkedList<String> linkedList) {
-
-    }
-
-    public Level getLvl() {
-        return lvl;
-    }
-
-    public void setLvl(Level l) {
-        this.lvl = l;
-    }
-
-    public String getP() {
-        return p;
-    }
-
-    public void setP(String p) {
-        this.p = p;
+        String path = params.get(0);
+        model.save(path);
     }
 }

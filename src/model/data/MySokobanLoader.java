@@ -12,7 +12,7 @@ public class MySokobanLoader implements Loader {
     private String pathToFile;
 
 
-   MySokobanLoader(String path)
+   public MySokobanLoader(String path)
     {
         fileTypes= new HashMap<String, LevelLoader>();
         fileTypes.put("txt", new MyTextLevelLoader());

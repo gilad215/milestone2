@@ -3,13 +3,30 @@ package view;
 import model.Model;
 import model.data.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Scanner;
 
-public class MyView extends Observable implements View{
-    private Displayer displayer;
-    String[] userinput;
+public class MyView extends Observable implements View {
+    private BufferedReader reader;
+    private PrintWriter writer;
+    private String exitString;
+
+    public MyView(BufferedReader reader, PrintWriter writer, String exitString) {
+        this.reader = reader;
+        this.writer = writer;
+        this.exitString = exitString;
+    }
+
+
+    public void display(Level l) {
+        Displayer displayer;
+        displayer = new MySokobanDisplay(l);
+        displayer.display();
+    }
 
     @Override
     public void notifyObservers() {
@@ -23,39 +40,41 @@ public class MyView extends Observable implements View{
     }
 
     @Override
-    public void displayError(Command c) {
-        System.out.println("Error: "+c);
+    public void displayMessage(Command c) {
+        System.out.println("Error: " + c);
     }
 
     @Override
     public void start() {
-        Scanner scanner = new Scanner(System.in);
-        Thread thread = new Thread(new Runnable() {
-
+        new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true) {
-                    System.out.print("Enter command: ");
-                    String commandLine = scanner.nextLine();
+                String commandLine = "";
+                do {
+                    writer.print("Enter command: ");
+                    writer.flush();
+                    try {
+                        commandLine = reader.readLine();
+                        String[] arr = commandLine.split(" ");
+                        LinkedList<String> params = new LinkedList<String>();
+                        for (String param : arr) {
+                            params.add(param);
+                        }
+                        setChanged();
+                        notifyObservers(params);
 
-                    String[] arr = commandLine.split(" ");
-                    LinkedList<String> params = new LinkedList<String>();
-
-                    for (String s: arr) {
-                        params.add(s);
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
                     }
-
-                    setChanged();
-                    notifyObservers(params);
-
-                    if (commandLine.equals("exit"))
-                        break;
-                }
+                } while (!commandLine.equals(exitString));
             }
-        });
-        thread.start();
+        }).start();
     }
 }
+
+
+
 
 /*public void displayData(Level lvl) {
         displayer=new MySokobanDisplay(lvl);

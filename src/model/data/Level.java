@@ -15,6 +15,7 @@ public class Level implements Serializable{
 
         this.board = board;
         setGoals();
+        System.out.println("Goals has been loaded! Number of Goals:"+getGoals().size());
     }
 
     public Level()

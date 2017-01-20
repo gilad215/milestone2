@@ -8,11 +8,11 @@ public class MySokobanPolicy implements Policy {
     private ArrayList<Point> Goals;
     private Level lvl;
 
-    public MySokobanPolicy(Level l, ArrayList<Point> g)
+    public MySokobanPolicy(Level l)
     {
         this.lvl=l;
         Goals = new ArrayList<Point>();
-        this.Goals=g;
+        this.Goals=lvl.getGoals();
     }
     public boolean isFinished()
     {
@@ -275,6 +275,7 @@ public class MySokobanPolicy implements Policy {
                     }
                 }
             }
+
     private boolean isGoal(Point p) {
         for (Point g:Goals) {
             if(Goals.isEmpty()) System.out.println("Goals is empty!");
@@ -282,6 +283,7 @@ public class MySokobanPolicy implements Policy {
             if(g.getPoint().equals(p.getPoint())) return true;
         }
         return false;}
+
     private int getIndexbyChar(char c, ArrayList<Character> arr) {
         int index = -1;
         for (Character line : arr) {
@@ -289,5 +291,8 @@ public class MySokobanPolicy implements Policy {
         }
         return index;
     }
+
+    public Level getLvl(){return this.lvl;}
+
 
 }

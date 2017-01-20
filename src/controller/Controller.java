@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.Observer;
 
 public class Controller  {
-    //private Model m;
     private BlockingQueue<Command> queue;
     private boolean isStopped = false;
 
@@ -33,13 +32,13 @@ public class Controller  {
                     try {
                         Command cmd = queue.poll(1, TimeUnit.SECONDS);
                         if (cmd != null)
-
                             cmd.execute();
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 }
+
             }
         });
         thread.start();

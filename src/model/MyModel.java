@@ -1,59 +1,58 @@
 package model;
 
 import model.data.*;
+import model.policy.MySokobanPolicy;
+import model.policy.Policy;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 
-public class MyModel extends Model {
-    private Level level;
+public class MyModel extends Observable implements Model {
+    private Level lvl;
+    private Policy policy;
+    private Loader loader;
+    private Saver saver;
+
+
+    public Level getLvl(){return lvl;}
 
     @Override
     public void load(String input) {
-        LoadLevelCommand load=new LoadLevelCommand(input);
-        load.execute();
-        this.setLevel(load.getLvl());
-        this.setChanged();
-        //this.notifyObservers();
-
-    }
-
-    @Override
-    public void save(String input) {
-        SaveLevelCommand save=new SaveLevelCommand(getLevel(),input);
-        save.execute();
-    }
-
-
-    @Override
-    public void move(String input) {
-        MoveLevelCommand move=new MoveLevelCommand();
-        move.execute();
-        setLevel(move.getLvl());
+        loader=new MySokobanLoader(input);
+        loader.load();
+        lvl=loader.getLvl();
+        lvl.setGoals();
         this.setChanged();
         List<String> params = new LinkedList<String>();
-        params.add("DISPLAY");
+        params.add("Display");
         this.notifyObservers(params);
 
     }
 
     @Override
-    public void exit() {
-        ExitCommand e=new ExitCommand();
-        e.execute();
-
+    public void save(String input) {
+        saver=new MySokobanSaver(lvl,input);
+        saver.save();
+        this.setChanged();
+        List<String> params = new LinkedList<String>();
+        params.add("Display");
+        this.notifyObservers(params);
     }
+
 
     @Override
-    public Level getLevel() {
-        return level;
+    public void move(String direction) {
+        policy=new MySokobanPolicy(lvl);
+        policy.Move(direction);
+        lvl=policy.getLvl();
+        this.setChanged();
+        LinkedList<String> params = new LinkedList<String>();
+        params.add("Display");
+        this.notifyObservers(params);
     }
 
-    public void setLevel(Level level) {
-        this.level = level;
-    }
 
     @Override
     public void notifyObservers() {
