@@ -22,6 +22,11 @@ public class MyModel extends Observable implements Model {
     public void load(String input) {
         loader=new MySokobanLoader(input);
         loader.load();
+        if(loader.getLvl()==null)
+        {
+            System.out.println("Level Invalid");
+            return;
+        }
         lvl=loader.getLvl();
         if(lvl==null) return;
         lvl.setGoals();
@@ -35,6 +40,11 @@ public class MyModel extends Observable implements Model {
     @Override
     public void save(String input) {
         saver=new MySokobanSaver(lvl,input);
+        if(saver.getLvl()==null)
+        {
+            System.out.println("Level Invalid");
+            return;
+        }
         saver.save();
         this.setChanged();
         List<String> params = new LinkedList<String>();

@@ -41,4 +41,9 @@ public class MySokobanSaver implements Saver{
             }
         }
     }
+
+    @Override
+    public Level getLvl() {
+        return lvl;
+    }
 }
