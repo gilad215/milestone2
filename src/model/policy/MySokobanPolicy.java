@@ -7,12 +7,16 @@ import java.util.ArrayList;
 public class MySokobanPolicy implements Policy {
     private ArrayList<Point> Goals;
     private Level lvl;
+    private int playerY;
+    private int playerX;
+    private Point PlayerPoint;
 
     public MySokobanPolicy(Level l)
     {
         this.lvl=l;
         Goals = new ArrayList<Point>();
         this.Goals=lvl.getGoals();
+        setPlayer();
     }
     public boolean isFinished()
     {
@@ -27,25 +31,7 @@ public class MySokobanPolicy implements Policy {
 
     public void Move(String move) {
         System.out.println("Move to be made:"+move);
-        int Y = lvl.getBoard().size();
-        int playerX = -1;
-        int playerY = lvl.getBoard().size();
-        System.out.println("Board Number of Rows:"+lvl.getBoard().size());
 
-
-        for (int i = 0; i < Y; i++) {
-                    playerX = getIndexbyChar('A', lvl.getBoard().get(i));
-                    if (playerX != -1) {
-                        playerY = i;
-                        break;
-                    }
-
-                }
-                if (playerX == -1) {
-                    System.out.println("Level is invalid.");
-                    return;
-                }
-                Point PlayerPoint=new Point(playerX,playerY);
 
                 switch (move) {
                     case ("up"): {
@@ -293,6 +279,28 @@ public class MySokobanPolicy implements Policy {
     }
 
     public Level getLvl(){return this.lvl;}
+    private void setPlayer()
+    {
+        int Y = lvl.getBoard().size();
+        playerX = -1;
+        playerY = lvl.getBoard().size();
+
+
+        for (int i = 0; i < Y; i++) {
+            playerX = getIndexbyChar('A', lvl.getBoard().get(i));
+            if (playerX != -1) {
+                playerY = i;
+                break;
+            }
+
+        }
+        if (playerX == -1) {
+            System.out.println("Level is invalid.");
+            return;
+        }
+        PlayerPoint=new Point(playerX,playerY);
+    }
+    public Point getPlayer() {return PlayerPoint;}
 
 
 }

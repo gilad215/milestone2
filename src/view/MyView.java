@@ -34,12 +34,6 @@ public class MyView extends Observable implements View {
     }
 
     @Override
-    public void DisplayPosition(Point p) {
-        System.out.println(p.getPoint());
-
-    }
-
-    @Override
     public void displayMessage(Command c) {
         System.out.println("Error: " + c);
     }
@@ -62,6 +56,7 @@ public class MyView extends Observable implements View {
                         }
                         setChanged();
                         notifyObservers(params);
+
 
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
