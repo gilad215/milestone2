@@ -12,8 +12,8 @@ import javafx.fxml.FXMLLoader;
 import java.io.FileInputStream;
 
 
-public class Main extends Application {
-	@Override
+public class GuiRun {
+
 	public void start(Stage primaryStage) {
 		try {
 			FXMLLoader fl=new FXMLLoader();
@@ -36,7 +36,5 @@ public class Main extends Application {
 		}
 	}
 
-	public static void main(String[] args) {
-		launch(args);
-	}
+
 }
