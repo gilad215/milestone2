@@ -42,6 +42,7 @@ public class MyController implements Observer {
             ui.displayMessage(c);
             return;
         }
+        System.out.println("sending"+params);
         c.setParams(params);
         controller.insertCommand(c);
     }

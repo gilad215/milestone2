@@ -12,7 +12,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
-public class Server implements View{
+public class Server{
     private int port;
     private ClientHandler ch;
     private volatile boolean stop;
@@ -22,36 +22,30 @@ public class Server implements View{
         this.ch = ch;
         stop = false;
     }
-    @Override
-    public void displayMessage(Command c) {
 
-    }
-
-    @Override
-    public void display(Level l) {
-
-    }
 
     public void runServer() {
         try{
         ServerSocket server=new ServerSocket(port);
+        System.out.println("Server is LIVE");
         server.setSoTimeout(1000);
             while(!stop){
 
-                    Socket aClient=server.accept(); // blocking call
-                    new Thread(new Runnable() { //WOW! we should control the number of threads!
+                    Socket aClient=server.accept();
+                System.out.println("Client Connected.");
+                    new Thread(new Runnable() {
                         public void run() {
                             try {
                                 ch.handleClient(aClient.getInputStream(), aClient.getOutputStream());
                                 aClient.getInputStream().close();
                                 aClient.getOutputStream().close();
                                 aClient.close();
-                            } catch (IOException e) {/*...*/}
+                            } catch (IOException e) {}
                         }
                     }).start();
                 }
-            server.close(); //WOW! we should wait for all threads before closing!
-        }           catch(SocketTimeoutException e) {/*...*/} catch (SocketException e) {
+            server.close();
+        }           catch(SocketTimeoutException e) {} catch (SocketException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,15 +53,21 @@ public class Server implements View{
 
     }
 
-    @Override
-    public void start(){
-        new Thread(new Runnable() {
-            public void run() {
-                try{runServer();}catch (Exception e){}
-            }
-        }).start();
-    }
     public void stop(){
         stop=true;
+    }
+    public void start()
+    {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try
+                {
+                    runServer();
+
+                }catch (Exception e) {e.printStackTrace();}
+
+            }
+        }).start();
     }
 }

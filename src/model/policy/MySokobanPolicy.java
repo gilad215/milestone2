@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class MySokobanPolicy implements Policy {
     private ArrayList<Point> Goals;
     private Level lvl;
+    private boolean moveMade=true;
     private int playerY;
     private int playerX;
     private Point PlayerPoint;
@@ -26,7 +27,7 @@ public class MySokobanPolicy implements Policy {
         return true;
     }
     private void notAllowed() {
-        System.out.println("Cant Move There!");
+        moveMade=false;
     }
 
     public void Move(String move) {
@@ -301,6 +302,7 @@ public class MySokobanPolicy implements Policy {
         PlayerPoint=new Point(playerX,playerY);
     }
     public Point getPlayer() {return PlayerPoint;}
+    public boolean moveMade(){return moveMade;}
 
 
 }

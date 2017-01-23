@@ -9,5 +9,7 @@ import java.util.Observable;
 public interface View{
     void displayMessage(Command c);
     void display(Level l);
+    void setMoveMade(String s);
+    void Finished();
     void start();
 }

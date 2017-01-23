@@ -29,6 +29,16 @@ public class MyView extends Observable implements View {
     }
 
     @Override
+    public void setMoveMade(String s) {
+
+    }
+
+    @Override
+    public void Finished() {
+        System.out.println("Level Finished!");
+    }
+
+    @Override
     public void notifyObservers() {
         super.notifyObservers();
     }
