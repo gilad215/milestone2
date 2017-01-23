@@ -43,17 +43,17 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
 	Text timer;
 	@FXML
     Text stepscount;
-	StringProperty timerCounter;
-	IntegerProperty stepsCounter;
+	private StringProperty timerCounter;
+	private IntegerProperty stepsCounter;
 
 
-	String command;
-    String mp3path= "./Extras/music/Kirby.mp3";
-    String finishpath="./Extras/music/finished.mp3";
-    Media mp3=new Media(new File(mp3path).toURI().toString());
-    Media finish=new Media(new File(finishpath).toURI().toString());
-    MediaPlayer player=new MediaPlayer(mp3);
-    MediaPlayer finished=new MediaPlayer(finish);
+	private String command;
+    private String mp3path= "./Extras/music/Kirby.mp3";
+    private String finishpath="./Extras/music/finished.mp3";
+    private Media mp3=new Media(new File(mp3path).toURI().toString());
+    private Media finish=new Media(new File(finishpath).toURI().toString());
+    private MediaPlayer player=new MediaPlayer(mp3);
+    private MediaPlayer finished=new MediaPlayer(finish);
 
 	@FXML
 	private SokoGuiDisplay displayer;
@@ -64,9 +64,7 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
         String[] arr = command.split(" ");
 
         LinkedList<String> list=new LinkedList<>();
-        for (String a:arr) {
-            list.add(a);
-        }
+        Collections.addAll(list, arr);
         this.setChanged();
 		this.notifyObservers(list);
 	}
@@ -92,6 +90,7 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
             finished.stop();
             player.play();
             startTimer();
+            displayer.requestFocus();
         }
 
 	}
@@ -221,7 +220,7 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
         player.stop();
         finished.stop();
     }
-    public void startTimer()
+    private  void startTimer()
     {
 
 
@@ -235,11 +234,11 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
         }, 0, 1000);
     }
 
-    public void setTimer(int num) {
+    private void setTimer(int num) {
         this.timercount = num;
         this.timerCounter.set(""+num);
     }
-    public int getTimer(){return this.timercount;}
+    private int getTimer(){return this.timercount;}
 
 }
 
