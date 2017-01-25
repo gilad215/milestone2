@@ -70,7 +70,7 @@
        </VBox>
    </left>
    <center>
-      <SokoGuiDisplay fx:id="displayer" height="450.0" width="450.0" BorderPane.alignment="CENTER" />
+      <SokoGuiDisplay fx:id="displayer" height="550.0" width="450.0" BorderPane.alignment="CENTER" />
    </center>
 
 </BorderPane>

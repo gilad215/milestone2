@@ -40,6 +40,7 @@ public class MyController implements Observer {
         Command c = commands.get(commandKey.toUpperCase());
         if (c == null) {
             ui.displayMessage(c);
+
             return;
         }
         System.out.println("sending"+params);

@@ -76,7 +76,7 @@ public void reDraw()
 			{
 				if(board.get(i).get(j)=='o') gc.drawImage(target, j*w, i*h, w, h);
 				if(board.get(i).get(j)=='A') gc.drawImage(hero, j*w, i*h, w, h);
-				if(board.get(i).get(j)=='@') gc.drawImage(box, j*w, i*h, w, h);
+				 if(board.get(i).get(j)=='@') gc.drawImage(box, j*w, i*h, w, h);
 				if(board.get(i).get(j)=='#') gc.drawImage(wall, j*w, i*h, w, h);
 				if(board.get(i).get(j)==' ') gc.drawImage(floor, j*w, i*h, w, h);
 

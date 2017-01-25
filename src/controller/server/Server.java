@@ -11,8 +11,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.Observable;
 
-public class Server{
+public class Server extends Observable{
     private int port;
     private ClientHandler ch;
     private volatile boolean stop;

@@ -5,7 +5,7 @@ package model.data;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Level implements Serializable{
+public class   Level implements Serializable{
 
     private ArrayList<Point> goals;
     private ArrayList<ArrayList<Character>> board;
