@@ -28,24 +28,20 @@ public void getWH(){
 	System.out.println(getWidth()+","+getHeight());
 }
 
-public void reDraw()
+void reDraw()
 {
 
 	ArrayList<ArrayList<Character>> board=this.lvl.getBoard();
-	//MySokobanDisplay dos= new MySokobanDisplay(lvl);
-	//dos.display();
 	if(board!=null) {
 		int longestRow = 0;
-		for (int g = 0; g < board.size(); g++)
-		{
-			if(board.get(g).size()>longestRow) longestRow=board.get(g).size();
+		for (ArrayList<Character> aBoard : board) {
+			if (aBoard.size() > longestRow) longestRow = aBoard.size();
 		}
 
 		double W=getWidth();
 		double H=getHeight();
 		double w=W/longestRow;
 		double h=H/board.size();
-		System.out.println(w+" "+h+" "+W+" "+H);
 
 
 		Image wall=null;
@@ -84,7 +80,7 @@ public void reDraw()
 		}
 	}
 }
-public void clearCanvas()
+void clearCanvas()
 {
 	gc.clearRect(0, 0, getWidth(), getHeight());
 }

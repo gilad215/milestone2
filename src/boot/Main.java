@@ -11,10 +11,10 @@ Main extends Application {
     private GuiRun gui=new GuiRun();
 
     public static void main(String[] args) {
-        CLIclient ch= new CLIclient();
-        int port=2159;
-        Server server= new Server(port,ch);
-        server.start();
+        //CLIclient ch= new CLIclient();
+        //int port=2159;
+        //Server server= new Server(port,ch);
+        //server.start();
         launch(args);
     }
 

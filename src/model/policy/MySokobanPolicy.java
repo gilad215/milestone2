@@ -15,7 +15,7 @@ public class MySokobanPolicy implements Policy {
     public MySokobanPolicy(Level l)
     {
         this.lvl=l;
-        Goals = new ArrayList<Point>();
+        Goals = new ArrayList<>();
         this.Goals=lvl.getGoals();
         setPlayer();
     }
@@ -265,8 +265,6 @@ public class MySokobanPolicy implements Policy {
 
     private boolean isGoal(Point p) {
         for (Point g:Goals) {
-            if(Goals.isEmpty()) System.out.println("Goals is empty!");
-            else System.out.println("Goals amount"+Goals.size());
             if(g.getPoint().equals(p.getPoint())) return true;
         }
         return false;}
