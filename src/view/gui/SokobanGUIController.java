@@ -31,6 +31,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -317,12 +318,32 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
         usertable.getSortOrder().add(FinishTimeColumn);
         usertable.getSortOrder().add(StepsColumn);
 
+        Label search=new Label("Search:");
+        TextField searchfield=new TextField();
+        searchfield.setText("Press ENTER to Search");
+        HBox hb=new HBox();
+        hb.getChildren().addAll(search,searchfield);
+        hb.setSpacing(10);
+        searchfield.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode().equals(KeyCode.ENTER))
+                {
+                    String[] split=searchfield.getText().split(" ");
+                    if(split.length>1)
+                    {
+                        showPlayerTable(new User(10,split[0],split[1],1,1));
+                    }
+                }
+            }
+        });
+
 
         Stage table = new Stage();
         table.setTitle("Leaderboards");
 
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(usertable);
+        vBox.getChildren().addAll(hb,usertable);
 
         Scene scene = new Scene(vBox);
         table.setScene(scene);
@@ -388,20 +409,6 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private  void startTimer()
     {
 
@@ -446,7 +453,7 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
     {
         ObservableList<User> users= FXCollections.observableArrayList();
         Query<User> query= HibernateUtil.getSessionFactory().openSession().createQuery("from Games");
-        query.setMaxResults(10);
+        query.setMaxResults(20);
         List<User> list=query.list();
         for (User u:list) {
             if(lvlid==0) users.add(u);
