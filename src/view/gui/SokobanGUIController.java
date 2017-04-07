@@ -56,7 +56,7 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
 	private int steps=0;
 
 	private HashMap<String,Integer> levelIDs;
-    private int lvlid;
+    private int lvlid=0;
     private	String fullname;
 
     @FXML
@@ -241,9 +241,10 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                int finishtime=getTimer();
                 TextInputDialog dialog=new TextInputDialog("Name");
                 dialog.setTitle("Level Finished!");
-                dialog.setHeaderText("Time: "+getTimer()+" Steps: "+steps);
+                dialog.setHeaderText("Time: "+finishtime+" Steps: "+steps);
 
                 dialog.setContentText("Please enter your Full name:");
                 Optional<String> result=dialog.showAndWait();
@@ -253,7 +254,7 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
                     fullname=result.get();
                 }
                 String[] name = fullname.split(" ");
-                addUser(new User(lvlid,name[0],name[1],steps,getTimer()));
+                addUser(new User(lvlid,name[0],name[1],steps,finishtime));
             }
         });
 
@@ -283,48 +284,115 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
 
     public void showLeaderBoards() {
 
-                TableView<User> usertable;
+        TableView<User> usertable;
 
-                TableColumn<User, Integer> gameidColumn = new TableColumn<>("Game ID");
-                gameidColumn.setMinWidth(100);
-                gameidColumn.setCellValueFactory(new PropertyValueFactory<>("GameID"));
+        TableColumn<User, Integer> gameidColumn = new TableColumn<>("Game ID");
+        gameidColumn.setMinWidth(100);
+        gameidColumn.setCellValueFactory(new PropertyValueFactory<>("GameID"));
 
-                TableColumn<User, Integer> LevelidColumn = new TableColumn<>("LevelID");
-                LevelidColumn.setMinWidth(100);
-                LevelidColumn.setCellValueFactory(new PropertyValueFactory<>("levelID"));
+        TableColumn<User, Integer> LevelidColumn = new TableColumn<>("LevelID");
+        LevelidColumn.setMinWidth(100);
+        LevelidColumn.setCellValueFactory(new PropertyValueFactory<>("levelID"));
 
-                TableColumn<User, String> FirstNameColumn = new TableColumn<>("First Name");
-                FirstNameColumn.setMinWidth(150);
-                FirstNameColumn.setCellValueFactory(new PropertyValueFactory<>("First_name"));
+        TableColumn<User, String> FirstNameColumn = new TableColumn<>("First Name");
+        FirstNameColumn.setMinWidth(150);
+        FirstNameColumn.setCellValueFactory(new PropertyValueFactory<>("First_name"));
 
-                TableColumn<User, String> LastNameColumn = new TableColumn<>("Last Name");
-                LastNameColumn.setMinWidth(150);
-                LastNameColumn.setCellValueFactory(new PropertyValueFactory<>("last_name"));
+        TableColumn<User, String> LastNameColumn = new TableColumn<>("Last Name");
+        LastNameColumn.setMinWidth(150);
+        LastNameColumn.setCellValueFactory(new PropertyValueFactory<>("last_name"));
 
-                TableColumn<User, Integer> FinishTimeColumn = new TableColumn<>("Finish Time");
-                FinishTimeColumn.setMinWidth(100);
-                FinishTimeColumn.setCellValueFactory(new PropertyValueFactory<>("Time"));
+        TableColumn<User, Integer> FinishTimeColumn = new TableColumn<>("Finish Time");
+        FinishTimeColumn.setMinWidth(100);
+        FinishTimeColumn.setCellValueFactory(new PropertyValueFactory<>("Time"));
 
-                TableColumn<User, Integer> StepsColumn = new TableColumn<>("Steps");
-                StepsColumn.setMinWidth(100);
-                StepsColumn.setCellValueFactory(new PropertyValueFactory<>("steps"));
+        TableColumn<User, Integer> StepsColumn = new TableColumn<>("Steps");
+        StepsColumn.setMinWidth(100);
+        StepsColumn.setCellValueFactory(new PropertyValueFactory<>("steps"));
 
-                usertable = new TableView<>();
-                usertable.setItems(getUsers());
-                usertable.getColumns().addAll(gameidColumn,LevelidColumn,FirstNameColumn,LastNameColumn,FinishTimeColumn,StepsColumn);
+        usertable = new TableView<>();
+        usertable.setItems(getUsers());
+        usertable.getColumns().addAll(gameidColumn, LevelidColumn, FirstNameColumn, LastNameColumn, FinishTimeColumn, StepsColumn);
+        usertable.getSortOrder().add(LevelidColumn);
+        usertable.getSortOrder().add(FinishTimeColumn);
+        usertable.getSortOrder().add(StepsColumn);
 
 
-                Stage table = new Stage();
-                table.setTitle("Leaderboards");
+        Stage table = new Stage();
+        table.setTitle("Leaderboards");
 
-                VBox vBox = new VBox();
-                vBox.getChildren().addAll(usertable);
+        VBox vBox = new VBox();
+        vBox.getChildren().addAll(usertable);
 
-                Scene scene = new Scene(vBox);
-                table.setScene(scene);
-                table.show();
+        Scene scene = new Scene(vBox);
+        table.setScene(scene);
+        table.show();
 
+        usertable.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(event.isPrimaryButtonDown() && event.getClickCount()==2)
+                    showPlayerTable(usertable.getSelectionModel().getSelectedItem());
+                    //usertable.getSelectionModel().getSelectedItem().printUser();
             }
+        });
+
+    }
+
+    public void showPlayerTable(User selectedUser)
+    {
+
+        TableView<User> usertable;
+
+        TableColumn<User, Integer> gameidColumn = new TableColumn<>("Game ID");
+        gameidColumn.setMinWidth(100);
+        gameidColumn.setCellValueFactory(new PropertyValueFactory<>("GameID"));
+
+        TableColumn<User, Integer> LevelidColumn = new TableColumn<>("LevelID");
+        LevelidColumn.setMinWidth(100);
+        LevelidColumn.setCellValueFactory(new PropertyValueFactory<>("levelID"));
+
+        TableColumn<User, String> FirstNameColumn = new TableColumn<>("First Name");
+        FirstNameColumn.setMinWidth(150);
+        FirstNameColumn.setCellValueFactory(new PropertyValueFactory<>("First_name"));
+
+        TableColumn<User, String> LastNameColumn = new TableColumn<>("Last Name");
+        LastNameColumn.setMinWidth(150);
+        LastNameColumn.setCellValueFactory(new PropertyValueFactory<>("last_name"));
+
+        TableColumn<User, Integer> FinishTimeColumn = new TableColumn<>("Finish Time");
+        FinishTimeColumn.setMinWidth(100);
+        FinishTimeColumn.setCellValueFactory(new PropertyValueFactory<>("Time"));
+
+        TableColumn<User, Integer> StepsColumn = new TableColumn<>("Steps");
+        StepsColumn.setMinWidth(100);
+        StepsColumn.setCellValueFactory(new PropertyValueFactory<>("steps"));
+
+        usertable = new TableView<>();
+        usertable.setItems(getUser(selectedUser));
+        usertable.getColumns().addAll(gameidColumn, LevelidColumn, FirstNameColumn, LastNameColumn, FinishTimeColumn, StepsColumn);
+        usertable.getSortOrder().add(LevelidColumn);
+        usertable.getSortOrder().add(FinishTimeColumn);
+        usertable.getSortOrder().add(StepsColumn);
+
+
+        Stage table = new Stage();
+        table.setTitle("Player Stats");
+
+        VBox vBox = new VBox();
+        vBox.getChildren().addAll(usertable);
+
+        Scene scene = new Scene(vBox);
+        table.setScene(scene);
+        table.show();
+
+    }
+
+
+
+
+
+
 
 
 
@@ -378,10 +446,28 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
     {
         ObservableList<User> users= FXCollections.observableArrayList();
         Query<User> query= HibernateUtil.getSessionFactory().openSession().createQuery("from Games");
+        query.setMaxResults(10);
         List<User> list=query.list();
         for (User u:list) {
-            users.add(u);
-            //u.printUser();
+            if(lvlid==0) users.add(u);
+            else {
+                if (u.getLevelID() == lvlid) users.add(u);
+            }
+
+        }
+        for(User user:users) user.printUser();
+        HibernateUtil.getSessionFactory().getCurrentSession().close();
+        return users;
+    }
+    public ObservableList<User> getUser(User selectedUser)
+    {
+        ObservableList<User> users= FXCollections.observableArrayList();
+        Query<User> query= HibernateUtil.getSessionFactory().openSession().createQuery("from Games");
+        query.setMaxResults(10);
+        List<User> list=query.list();
+        for (User u:list) {
+                if(selectedUser.getFirst_name().compareTo(u.getFirst_name())==0 && selectedUser.getLast_name().compareTo(u.getLast_name())==0)
+                    users.add(u);
         }
         for(User user:users) user.printUser();
         HibernateUtil.getSessionFactory().getCurrentSession().close();
