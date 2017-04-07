@@ -249,12 +249,15 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
 
                 dialog.setContentText("Please enter your Full name:");
                 Optional<String> result=dialog.showAndWait();
-                if(result.isPresent())
+                fullname=result.get();
+                while(fullname.split(" ").length!=2)
                 {
-                    System.out.println(result.get());
+                    result=dialog.showAndWait();
+                    System.out.println(result.get()+"length: "+fullname.length());
                     fullname=result.get();
                 }
                 String[] name = fullname.split(" ");
+
                 addUser(new User(lvlid,name[0],name[1],steps,finishtime));
             }
         });
