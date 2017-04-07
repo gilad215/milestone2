@@ -6,9 +6,14 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
 import com.sun.javafx.application.HostServicesDelegate;
+import db.HibernateUtil;
+import db.User;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
@@ -19,6 +24,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -30,16 +36,24 @@ import javafx.application.HostServices;
 import model.data.Command;
 import model.data.Level;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 import view.View;
 
 public class SokobanGUIController extends Observable implements Initializable,View {
 	private Level lvl;
 	private HostServices services;
-
 	private int timercount;
 	private int steps=0;
 
-	@FXML
+	private HashMap<String,Integer> levelIDs;
+    private int lvlid;
+    private	String fullname;
+
+    @FXML
 	Text timer;
 	@FXML
     Text stepscount;
@@ -57,6 +71,17 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
 
 	@FXML
 	private SokoGuiDisplay displayer;
+
+    public SokobanGUIController()
+    {
+
+
+        levelIDs=new HashMap<>();
+        levelIDs.put("LEVEL1",1);
+        levelIDs.put("LEVEL2",2);
+        levelIDs.put("LEVEL3",3);
+
+    }
 
 	public void setCommand(String c)
 	{
@@ -82,6 +107,14 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
 		File chosen= fc.showOpenDialog(null);
 		if(chosen!=null)
 		{
+		    String pattern="level\\d+";
+            Pattern p=Pattern.compile(pattern);
+            Matcher m=p.matcher(chosen.getPath());
+            if(m.find())
+            {
+                if(levelIDs.containsKey(m.group(0).toUpperCase())) lvlid=levelIDs.get(m.group(0).toUpperCase());
+            }
+
             List<String> params = new LinkedList<String>();
             params.add("load");
             params.add(chosen.getPath());
@@ -123,6 +156,7 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
 
 	    timerCounter=new SimpleStringProperty();
         stepsCounter=new SimpleIntegerProperty();
+
 
         setTimer(0);
         timer.textProperty().bind(timerCounter);
@@ -198,6 +232,26 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
 	    player.stop();
 	    finished.play();
 
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                TextInputDialog dialog=new TextInputDialog("Name");
+                dialog.setTitle("Level Finished!");
+                dialog.setHeaderText("Time: "+getTimer()+" Steps: "+steps);
+
+                dialog.setContentText("Please enter your Full name:");
+                Optional<String> result=dialog.showAndWait();
+                if(result.isPresent())
+                {
+                    System.out.println(result.get());
+                    fullname=result.get();
+                }
+                String[] name = fullname.split(" ");
+                addUser(new User(lvlid,name[0],name[1],steps,getTimer()));
+            }
+        });
+
+
     }
 
     public void stop()
@@ -240,5 +294,25 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
     }
     private int getTimer(){return this.timercount;}
 
+    private void addUser(User u)
+    {
+
+                Session session= HibernateUtil.getSessionFactory().getCurrentSession();
+                System.out.println("Session opened");
+
+                try {
+                    session.beginTransaction();
+                    session.save(u);
+                    session.getTransaction().commit();
+                } catch (HibernateException e) {
+                    if (session.getTransaction() != null)
+                        session.getTransaction().rollback();
+                    e.printStackTrace();
+                } finally {
+                    session.close();
+                }
+
+
+    }
 }
 
