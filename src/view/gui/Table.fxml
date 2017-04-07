@@ -26,19 +26,14 @@
               <MenuItem mnemonicParsing="false" onAction="#playMusic" text="Play" />
                 <MenuItem mnemonicParsing="false" onAction="#stopMusic" text="Stop" />
             </items>
-
           </Menu>
-            <Menu mnemonicParsing="false" text="Leaderboards">
-                  <items>
-                      <MenuItem mnemonicParsing="false" onAction="#showLeaderBoards" text="Show Leaderboards" />
-                  </items>
-            </Menu>
         </menus>
       </MenuBar>
    </top>
    <left>
        <VBox prefHeight="500.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
+                   <Button text="Leaderboards" onAction="#showLeaderBoards"> <VBox.margin> <Insets top="10" left="10"/> </VBox.margin> </Button>
                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Level Timer:">
                        <VBox.margin>
                            <Insets left="10.0" top="40.0" />

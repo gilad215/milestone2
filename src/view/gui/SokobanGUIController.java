@@ -1,9 +1,6 @@
 package view.gui;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 import java.util.logging.Logger;
@@ -20,19 +17,27 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextInputDialog;
+import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.application.HostServices;
+import javafx.stage.Stage;
 import model.data.Command;
 import model.data.Level;
 
@@ -41,6 +46,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 import view.View;
 
 public class SokobanGUIController extends Observable implements Initializable,View {
@@ -74,12 +80,12 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
 
     public SokobanGUIController()
     {
-
-
         levelIDs=new HashMap<>();
         levelIDs.put("LEVEL1",1);
         levelIDs.put("LEVEL2",2);
         levelIDs.put("LEVEL3",3);
+
+
 
     }
 
@@ -274,6 +280,60 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
         player.stop();
         finished.stop();
     }
+
+    public void showLeaderBoards() {
+
+                TableView<User> usertable;
+
+                TableColumn<User, Integer> gameidColumn = new TableColumn<>("Game ID");
+                gameidColumn.setMinWidth(100);
+                gameidColumn.setCellValueFactory(new PropertyValueFactory<>("GameID"));
+
+                TableColumn<User, Integer> LevelidColumn = new TableColumn<>("LevelID");
+                LevelidColumn.setMinWidth(100);
+                LevelidColumn.setCellValueFactory(new PropertyValueFactory<>("levelID"));
+
+                TableColumn<User, String> FirstNameColumn = new TableColumn<>("First Name");
+                FirstNameColumn.setMinWidth(150);
+                FirstNameColumn.setCellValueFactory(new PropertyValueFactory<>("First_name"));
+
+                TableColumn<User, String> LastNameColumn = new TableColumn<>("Last Name");
+                LastNameColumn.setMinWidth(150);
+                LastNameColumn.setCellValueFactory(new PropertyValueFactory<>("last_name"));
+
+                TableColumn<User, Integer> FinishTimeColumn = new TableColumn<>("Finish Time");
+                FinishTimeColumn.setMinWidth(100);
+                FinishTimeColumn.setCellValueFactory(new PropertyValueFactory<>("Time"));
+
+                TableColumn<User, Integer> StepsColumn = new TableColumn<>("Steps");
+                StepsColumn.setMinWidth(100);
+                StepsColumn.setCellValueFactory(new PropertyValueFactory<>("steps"));
+
+                usertable = new TableView<>();
+                usertable.setItems(getUsers());
+                usertable.getColumns().addAll(gameidColumn,LevelidColumn,FirstNameColumn,LastNameColumn,FinishTimeColumn,StepsColumn);
+
+
+                Stage table = new Stage();
+                table.setTitle("Leaderboards");
+
+                VBox vBox = new VBox();
+                vBox.getChildren().addAll(usertable);
+
+                Scene scene = new Scene(vBox);
+                table.setScene(scene);
+                table.show();
+
+            }
+
+
+
+
+
+
+
+
+
     private  void startTimer()
     {
 
@@ -313,6 +373,19 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
                 }
 
 
+    }
+    public ObservableList<User> getUsers()
+    {
+        ObservableList<User> users= FXCollections.observableArrayList();
+        Query<User> query= HibernateUtil.getSessionFactory().openSession().createQuery("from Games");
+        List<User> list=query.list();
+        for (User u:list) {
+            users.add(u);
+            //u.printUser();
+        }
+        for(User user:users) user.printUser();
+        HibernateUtil.getSessionFactory().getCurrentSession().close();
+        return users;
     }
 }
 

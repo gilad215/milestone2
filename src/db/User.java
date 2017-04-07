@@ -1,10 +1,13 @@
 package db;
+
 import javax.persistence.*;
 
-@Entity(name="Users")
+@Entity(name="Games")
 public class User {
     @Id
-    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int GameID;
+    @Column(name="LevelID")
     private int LevelID;
     @Column(name="FirstName")
     private String first_name;
@@ -25,6 +28,12 @@ public class User {
         setLast_name(last_name);
         setSteps(steps);
         setTime(time);
+    }
+
+    public int getGameID() {return GameID;}
+
+    public void setgameID(int gameID) {
+        this.GameID = gameID;
     }
 
     public int getLevelID() {
@@ -66,4 +75,13 @@ public class User {
     public void setTime(int time) {
         this.time = time;
     }
+
+    public void printUser()
+    {
+        System.out.println("gameID: "+getGameID() +" LevelID : "+getLevelID()+" NAME:"+getFirst_name()+" "+getLast_name()+" FinishTime:"+getTime()+" Steps:"+getSteps());
+    }
+
+
+
+
 }
