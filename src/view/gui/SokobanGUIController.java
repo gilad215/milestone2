@@ -28,6 +28,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -243,12 +244,18 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+
                 int finishtime=getTimer();
                 TextInputDialog dialog=new TextInputDialog("Name");
                 dialog.setTitle("Level Finished!");
                 dialog.setHeaderText("Time: "+finishtime+" Steps: "+steps);
-
                 dialog.setContentText("Please enter your Full name:");
+                Stage stage=(Stage)dialog.getDialogPane().getScene().getWindow();
+                try {
+                    stage.getIcons().add(new Image(new FileInputStream("./Extras/images/leaderboard.png")));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
                 Optional<String> result=dialog.showAndWait();
                 fullname=result.get();
                 while(fullname.split(" ").length!=2)
@@ -287,7 +294,7 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
         finished.stop();
     }
 
-    public void showLeaderBoards() {
+    public void showLeaderBoards() throws FileNotFoundException {
 
         TableView<User> usertable;
 
@@ -336,10 +343,18 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
                     String[] split=searchfield.getText().split(" ");
                     if(split.length>1)
                     {
-                        showPlayerTable(new User(10,split[0],split[1],1,1));
+                        try {
+                            showPlayerTable(new User(10,split[0],split[1],1,1));
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
                     }
                     System.out.println(split[0].toUpperCase());
-                    if(levelIDs.containsKey(split[0].toUpperCase())) showLevelTable(levelIDs.get(split[0].toUpperCase()));
+                    if(levelIDs.containsKey(split[0].toUpperCase())) try {
+                        showLevelTable(levelIDs.get(split[0].toUpperCase()));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -353,21 +368,25 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
 
         Scene scene = new Scene(vBox);
         table.setScene(scene);
+        table.getIcons().add(new Image(new FileInputStream("./Extras/images/leaderboard.png")));
         table.show();
 
         usertable.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if(event.isPrimaryButtonDown() && event.getClickCount()==2)
-                    showPlayerTable(usertable.getSelectionModel().getSelectedItem());
-                    //usertable.getSelectionModel().getSelectedItem().printUser();
+                    try {
+                        showPlayerTable(usertable.getSelectionModel().getSelectedItem());
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                //usertable.getSelectionModel().getSelectedItem().printUser();
             }
         });
 
     }
 
-    public void showPlayerTable(User selectedUser)
-    {
+    public void showPlayerTable(User selectedUser) throws FileNotFoundException {
 
         TableView<User> usertable;
 
@@ -405,18 +424,19 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
 
         Stage table = new Stage();
         table.setTitle("Player Stats");
+        table.getIcons().add(new Image(new FileInputStream("./Extras/images/leaderboard.png")));
 
         VBox vBox = new VBox();
         vBox.getChildren().addAll(usertable);
 
         Scene scene = new Scene(vBox);
+
         table.setScene(scene);
         table.show();
 
     }
 
-    public void showLevelTable(int lvlid)
-    {
+    public void showLevelTable(int lvlid) throws FileNotFoundException {
 
         TableView<User> usertable;
 
@@ -454,6 +474,7 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
 
         Stage table = new Stage();
         table.setTitle("Player Stats");
+        table.getIcons().add(new Image(new FileInputStream("./Extras/images/leaderboard.png")));
 
         VBox vBox = new VBox();
         vBox.getChildren().addAll(usertable);
