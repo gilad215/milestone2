@@ -85,6 +85,7 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
         levelIDs.put("LEVEL1",1);
         levelIDs.put("LEVEL2",2);
         levelIDs.put("LEVEL3",3);
+        levelIDs.put("LEVEL4",4);
 
 
 
@@ -337,6 +338,8 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
                     {
                         showPlayerTable(new User(10,split[0],split[1],1,1));
                     }
+                    System.out.println(split[0].toUpperCase());
+                    if(levelIDs.containsKey(split[0].toUpperCase())) showLevelTable(levelIDs.get(split[0].toUpperCase()));
                 }
             }
         });
@@ -394,6 +397,55 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
 
         usertable = new TableView<>();
         usertable.setItems(getUser(selectedUser));
+        usertable.getColumns().addAll(gameidColumn, LevelidColumn, FirstNameColumn, LastNameColumn, FinishTimeColumn, StepsColumn);
+        usertable.getSortOrder().add(LevelidColumn);
+        usertable.getSortOrder().add(FinishTimeColumn);
+        usertable.getSortOrder().add(StepsColumn);
+
+
+        Stage table = new Stage();
+        table.setTitle("Player Stats");
+
+        VBox vBox = new VBox();
+        vBox.getChildren().addAll(usertable);
+
+        Scene scene = new Scene(vBox);
+        table.setScene(scene);
+        table.show();
+
+    }
+
+    public void showLevelTable(int lvlid)
+    {
+
+        TableView<User> usertable;
+
+        TableColumn<User, Integer> gameidColumn = new TableColumn<>("Game ID");
+        gameidColumn.setMinWidth(100);
+        gameidColumn.setCellValueFactory(new PropertyValueFactory<>("GameID"));
+
+        TableColumn<User, Integer> LevelidColumn = new TableColumn<>("LevelID");
+        LevelidColumn.setMinWidth(100);
+        LevelidColumn.setCellValueFactory(new PropertyValueFactory<>("levelID"));
+
+        TableColumn<User, String> FirstNameColumn = new TableColumn<>("First Name");
+        FirstNameColumn.setMinWidth(150);
+        FirstNameColumn.setCellValueFactory(new PropertyValueFactory<>("First_name"));
+
+        TableColumn<User, String> LastNameColumn = new TableColumn<>("Last Name");
+        LastNameColumn.setMinWidth(150);
+        LastNameColumn.setCellValueFactory(new PropertyValueFactory<>("last_name"));
+
+        TableColumn<User, Integer> FinishTimeColumn = new TableColumn<>("Finish Time");
+        FinishTimeColumn.setMinWidth(100);
+        FinishTimeColumn.setCellValueFactory(new PropertyValueFactory<>("Time"));
+
+        TableColumn<User, Integer> StepsColumn = new TableColumn<>("Steps");
+        StepsColumn.setMinWidth(100);
+        StepsColumn.setCellValueFactory(new PropertyValueFactory<>("steps"));
+
+        usertable = new TableView<>();
+        usertable.setItems(getLevel(lvlid));
         usertable.getColumns().addAll(gameidColumn, LevelidColumn, FirstNameColumn, LastNameColumn, FinishTimeColumn, StepsColumn);
         usertable.getSortOrder().add(LevelidColumn);
         usertable.getSortOrder().add(FinishTimeColumn);
@@ -473,11 +525,23 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
     {
         ObservableList<User> users= FXCollections.observableArrayList();
         Query<User> query= HibernateUtil.getSessionFactory().openSession().createQuery("from Games");
-        query.setMaxResults(10);
         List<User> list=query.list();
         for (User u:list) {
                 if(selectedUser.getFirst_name().compareTo(u.getFirst_name())==0 && selectedUser.getLast_name().compareTo(u.getLast_name())==0)
                     users.add(u);
+        }
+        for(User user:users) user.printUser();
+        HibernateUtil.getSessionFactory().getCurrentSession().close();
+        return users;
+    }
+    public ObservableList<User> getLevel(int lvlid)
+    {
+        ObservableList<User> users= FXCollections.observableArrayList();
+        Query<User> query= HibernateUtil.getSessionFactory().openSession().createQuery("from Games");
+        List<User> list=query.list();
+        for (User u:list) {
+            if(lvlid==u.getLevelID())
+                users.add(u);
         }
         for(User user:users) user.printUser();
         HibernateUtil.getSessionFactory().getCurrentSession().close();
