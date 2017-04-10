@@ -1,9 +1,12 @@
 package model;
 
+import db.TableUtil;
+import javafx.application.Platform;
 import model.data.*;
 import model.policy.MySokobanPolicy;
 import model.policy.Policy;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,12 +17,15 @@ public class MyModel extends Observable implements Model {
     private Policy policy;
     private Loader loader;
     private Saver saver;
+    private TableUtil tableUtil;
 
 
+    public MyModel() {tableUtil=new TableUtil();}
     public Level getLvl(){return lvl;}
 
     @Override
     public void load(String input) {
+
         loader=new MySokobanLoader(input);
         loader.load();
         if(loader.getLvl()==null)
@@ -74,5 +80,23 @@ public class MyModel extends Observable implements Model {
     @Override
     public void notifyObservers() {
         super.notifyObservers();
+    }
+    @Override
+    public void setLvlID(int lvlid) {
+        System.out.println("LVLID CHANGED! TO: "+lvlid); this.tableUtil.setLvlid(lvlid);}
+
+    @Override
+    public void showLeaderboard() throws FileNotFoundException {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    tableUtil.showLeaderboard();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 }

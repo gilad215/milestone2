@@ -29,6 +29,7 @@ public class MyController implements Observer {
         commands.put("DISPLAY", new DisplayLevelCommand(model,ui));
         commands.put("LOAD", new LoadLevelCommand(model));
         commands.put("SAVE",new SaveLevelCommand(model));
+        commands.put("LEADERBOARD",new LeaderboardCommand(model));
 
 
     }

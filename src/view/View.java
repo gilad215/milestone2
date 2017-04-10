@@ -4,6 +4,8 @@ import model.data.Command;
 import model.data.Level;
 import model.data.Point;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Observable;
 
 public interface View{

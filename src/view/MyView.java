@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Scanner;
 
@@ -37,6 +38,7 @@ public class MyView extends Observable implements View {
     public void Finished() {
         System.out.println("Level Finished!");
     }
+
 
     @Override
     public void notifyObservers() {

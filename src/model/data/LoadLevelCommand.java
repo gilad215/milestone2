@@ -14,8 +14,9 @@ public class LoadLevelCommand extends Command {
 
     @Override
     public void execute() {
-        String path = params.get(0);
-        model.load(path);
+        model.load(params.get(0));
+        System.out.println("PRAMAS{1} is "+params.get(1));
+        model.setLvlID(Integer.parseInt(params.get(1)));
     }
 }
 
