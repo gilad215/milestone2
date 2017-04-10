@@ -84,6 +84,7 @@ public class MyModel extends Observable implements Model {
         LinkedList<String> params = new LinkedList<String>();
         params.add("Display");
         if(policy.moveMade()) params.add("movemade");
+        this.notifyObservers(params);
         if(policy.isFinished()) params.add("finished");
         this.notifyObservers(params);
     }

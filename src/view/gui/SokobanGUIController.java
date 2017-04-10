@@ -255,13 +255,17 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
                     }
 
                 }
+                if(fullname!=null)
                 return fullname.split(" ");
+                else return null;
             }
 
         });
         Platform.runLater(query);
         try {
-            name=(String[])query.get();
+            if(query.get()!=null) {
+                name = (String[]) query.get();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -269,14 +273,16 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
         }
 
         List<String> params = new LinkedList<String>();
-        params.add("adduser");
-        params.add(name[0]);
-        params.add(name[1]);
-        params.add(String.valueOf(steps));
-        params.add(String.valueOf(finishtime));
+        if(name!=null) {
+            params.add("adduser");
+            params.add(name[0]);
+            params.add(name[1]);
+            params.add(String.valueOf(steps));
+            params.add(String.valueOf(finishtime));
 
-        this.setChanged();
-        this.notifyObservers(params);
+            this.setChanged();
+            this.notifyObservers(params);
+        }
 
     }
 
