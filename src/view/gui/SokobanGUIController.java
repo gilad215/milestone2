@@ -245,28 +245,30 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
             @Override
             public void run() {
 
-                int finishtime=getTimer();
-                TextInputDialog dialog=new TextInputDialog("Name");
+                int finishtime = getTimer();
+                TextInputDialog dialog = new TextInputDialog("Name");
                 dialog.setTitle("Level Finished!");
-                dialog.setHeaderText("Time: "+finishtime+" Steps: "+steps);
+                dialog.setHeaderText("Time: " + finishtime + " Steps: " + steps);
                 dialog.setContentText("Please enter your Full name:");
-                Stage stage=(Stage)dialog.getDialogPane().getScene().getWindow();
+
+                Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
                 try {
                     stage.getIcons().add(new Image(new FileInputStream("./Extras/images/leaderboard.png")));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-                Optional<String> result=dialog.showAndWait();
-                fullname=result.get();
-                while(fullname.split(" ").length!=2)
-                {
-                    result=dialog.showAndWait();
-                    System.out.println(result.get()+"length: "+fullname.length());
-                    fullname=result.get();
-                }
-                String[] name = fullname.split(" ");
+                Optional<String> result = dialog.showAndWait();
+                if (result.isPresent()) {
+                    fullname = result.get();
+                    while (fullname.split(" ").length != 2) {
+                        result = dialog.showAndWait();
+                        System.out.println(result.get() + "length: " + fullname.length());
+                        fullname = result.get();
+                    }
+                    String[] name = fullname.split(" ");
 
-                addUser(new User(lvlid,name[0],name[1],steps,finishtime));
+                    addUser(new User(lvlid, name[0], name[1], steps, finishtime));
+                }
             }
         });
 
@@ -529,7 +531,7 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
     {
         ObservableList<User> users= FXCollections.observableArrayList();
         Query<User> query= HibernateUtil.getSessionFactory().openSession().createQuery("from Games");
-        query.setMaxResults(20);
+        //query.setMaxResults(20);
         List<User> list=query.list();
         for (User u:list) {
             if(lvlid==0) users.add(u);
