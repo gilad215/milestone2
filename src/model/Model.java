@@ -11,8 +11,8 @@ public interface Model {
     void load(String input);
     void save(String input);
     void move(String direction);
-    void setLvlID(int lvlid);
     void showLeaderboard() throws FileNotFoundException;
+    void addUser(String fn,String ln,int steps,int time);
     public Level getLvl();
 
 

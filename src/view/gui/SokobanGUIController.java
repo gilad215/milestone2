@@ -3,6 +3,9 @@ package view.gui;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,9 +59,10 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
 	private int timercount;
 	private int steps=0;
 
-    private int lvlid=0;
+	private int finishtime;
+    private String[] name;
     private	String fullname;
-    private TableUtil tableUtil;
+    //private TableUtil tableUtil;
 
     @FXML
 	Text timer;
@@ -81,7 +85,6 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
 
     public SokobanGUIController()
     {
-        tableUtil=new TableUtil();
     }
 
 	public void setCommand(String c)
@@ -108,18 +111,10 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
 		File chosen= fc.showOpenDialog(null);
 		if(chosen!=null)
 		{
-		    String pattern="level\\d+";
-            Pattern p=Pattern.compile(pattern);
-            Matcher m=p.matcher(chosen.getPath());
-            if(m.find())
-            {
-                if(tableUtil.getLevelIDs().containsKey(m.group(0).toUpperCase())) tableUtil.setLvlid(tableUtil.getLevelIDs().get(m.group(0).toUpperCase()));
-            }
 
             List<String> params = new LinkedList<String>();
             params.add("load");
             params.add(chosen.getPath());
-            params.add(String.valueOf(tableUtil.getLvlid()));
             this.setChanged();
             this.notifyObservers(params);
             finished.stop();
@@ -231,14 +226,14 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
 
     @Override
     public void Finished() {
-	    player.stop();
+
+        player.stop();
 	    finished.play();
 
-        Platform.runLater(new Runnable() {
+        final FutureTask query=new FutureTask(new Callable() {
             @Override
-            public void run() {
-
-                int finishtime = getTimer();
+            public Object call() throws Exception {
+                finishtime = getTimer();
                 TextInputDialog dialog = new TextInputDialog("Name");
                 dialog.setTitle("Level Finished!");
                 dialog.setHeaderText("Time: " + finishtime + " Steps: " + steps);
@@ -258,13 +253,30 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
                         System.out.println(result.get() + "length: " + fullname.length());
                         fullname = result.get();
                     }
-                    String[] name = fullname.split(" ");
 
-                    tableUtil.addUser(new User(tableUtil.getLvlid(), name[0], name[1], steps, finishtime));
                 }
+                return fullname.split(" ");
             }
-        });
 
+        });
+        Platform.runLater(query);
+        try {
+            name=(String[])query.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        List<String> params = new LinkedList<String>();
+        params.add("adduser");
+        params.add(name[0]);
+        params.add(name[1]);
+        params.add(String.valueOf(steps));
+        params.add(String.valueOf(finishtime));
+
+        this.setChanged();
+        this.notifyObservers(params);
 
     }
 

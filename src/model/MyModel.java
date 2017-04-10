@@ -1,6 +1,7 @@
 package model;
 
 import db.TableUtil;
+import db.User;
 import javafx.application.Platform;
 import model.data.*;
 import model.policy.MySokobanPolicy;
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MyModel extends Observable implements Model {
     private Level lvl;
@@ -36,6 +39,15 @@ public class MyModel extends Observable implements Model {
         lvl=loader.getLvl();
         if(lvl==null) return;
         lvl.setGoals();
+
+        String pattern="level\\d+";
+        Pattern p=Pattern.compile(pattern);
+        Matcher m=p.matcher(input);
+        if(m.find())
+        {
+            if(tableUtil.getLevelIDs().containsKey(m.group(0).toUpperCase())) tableUtil.setLvlid(tableUtil.getLevelIDs().get(m.group(0).toUpperCase()));
+        }
+
         this.setChanged();
         List<String> params = new LinkedList<String>();
         params.add("Display");
@@ -81,9 +93,6 @@ public class MyModel extends Observable implements Model {
     public void notifyObservers() {
         super.notifyObservers();
     }
-    @Override
-    public void setLvlID(int lvlid) {
-        System.out.println("LVLID CHANGED! TO: "+lvlid); this.tableUtil.setLvlid(lvlid);}
 
     @Override
     public void showLeaderboard() throws FileNotFoundException {
@@ -98,5 +107,10 @@ public class MyModel extends Observable implements Model {
             }
         });
 
+    }
+
+    @Override
+    public void addUser(String fn, String ln, int steps, int time) {
+        tableUtil.addUser(new User(tableUtil.getLvlid(),fn,ln,steps,time));
     }
 }
