@@ -250,7 +250,6 @@ public class SokobanGUIController extends Observable implements Initializable,Vi
                     fullname = result.get();
                     while (fullname.split(" ").length != 2) {
                         result = dialog.showAndWait();
-                        System.out.println(result.get() + "length: " + fullname.length());
                         fullname = result.get();
                     }
 

@@ -51,7 +51,7 @@ public class TableUtil {
         gameidColumn.setMinWidth(100);
         gameidColumn.setCellValueFactory(new PropertyValueFactory<>("GameID"));
 
-        LevelidColumn = new TableColumn<>("LevelID");
+        LevelidColumn = new TableColumn<>("Level ID");
         LevelidColumn.setMinWidth(100);
         LevelidColumn.setCellValueFactory(new PropertyValueFactory<>("levelID"));
 
@@ -83,14 +83,12 @@ public class TableUtil {
         usertable.getSortOrder().add(FinishTimeColumn);
         usertable.getSortOrder().add(StepsColumn);
 
-        Label search=new Label("Search:");
+        Label search=new Label("Search");
         TextField searchfield=new TextField();
         searchfield.setText("Press ENTER to Search");
         HBox hb=new HBox();
         hb.getChildren().addAll(search,searchfield);
         hb.setSpacing(10);
-
-
 
         Stage table = new Stage();
         table.setTitle("Leaderboards");
