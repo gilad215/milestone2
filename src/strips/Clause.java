@@ -2,8 +2,11 @@ package strips;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Set;
 
 public class Clause extends Predicate {
+
+
 
     HashSet<Predicate> predicates;
 
@@ -56,6 +59,16 @@ public class Clause extends Predicate {
     }
 
 
+    public Set<Predicate> getPredicates() {
+        return predicates;
+    }
+
+    public void add(Predicate p){
+        if(predicates==null)
+            predicates=new HashSet<>();
+        this.predicates.add(p);
+        updateDescription();
+    }
 
     @Override
     public int hashCode()
