@@ -41,4 +41,11 @@ public class Point {
         return ("("+x+","+y+")");
     }
 
+
+    public boolean equals(Point p)
+    {
+        if(x==p.getX() && y==p.getY()) return true;
+        else return false;
+    }
+
 }

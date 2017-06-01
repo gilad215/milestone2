@@ -10,7 +10,7 @@ public abstract class CommonSearcher<T> implements Searcher<T> {
 
     protected Solution backTrace(State<T> goalState)
     {
-        LinkedList<Action> actions=new LinkedList<>();
+        LinkedList<SearchAction> actions=new LinkedList<>();
         State<T> currState=goalState;
         while(currState.getCameFrom()!=null)
         {

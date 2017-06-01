@@ -1,15 +1,15 @@
 package searchLib.data;
 
-public class Action {
+public class SearchAction {
     private String act;
-    public Action(String a){this.act=a; }
+    public SearchAction(String a){this.act=a; }
     public String getAct(){return act;}
     public void setAct(String a){this.act=a;}
 
     @Override
     public boolean equals(Object obj)
     {
-        Action a=(Action)obj;
+        SearchAction a=(SearchAction)obj;
         return a.act.equals(act);
     }
     @Override

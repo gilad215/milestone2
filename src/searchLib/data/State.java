@@ -4,7 +4,9 @@ public class State<T> {
     private T state;
     private double cost;
     private State<T> cameFrom;
-    private Action action;
+    private SearchAction action;
+
+
 
     public T getState() {
         return state;
@@ -43,11 +45,11 @@ public class State<T> {
         return state.toString();
     }
 
-    public Action getAction() {
+    public SearchAction getAction() {
         return action;
     }
 
-    public void setAction(Action action) {
+    public void setAction(SearchAction action) {
         this.action = action;
     }
 }

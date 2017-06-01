@@ -51,5 +51,14 @@ public class   Level implements Serializable{
         }
     }
     public ArrayList<Point> getGoals(){return goals;}
+    public Point getInitialState()
+    {
+        for (int i = 0; i < getBoard().size(); i++) {
+            for (int j = 0; j < getBoard().get(i).size(); j++) {
+                if (getBoard().get(i).get(j).equals('A')) return new Point(j, i);
+            }
+        }
+        return null;
+    }
 
 }

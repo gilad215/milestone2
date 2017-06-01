@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Solution<T> {
-    private List<Action> actions=new ArrayList<>();
+    private List<SearchAction> actions=new ArrayList<>();
 
-    public List<Action> getActions() {
+    public List<SearchAction> getActions() {
         return actions;
     }
 
-    public void setActions(List<Action> actions) {
+    public void setActions(List<SearchAction> actions) {
         this.actions = actions;
     }
 }

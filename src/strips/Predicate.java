@@ -43,5 +43,9 @@ public class Predicate {
         return (type.equals(p.type) && id.equals(p.id) && !value.equals(p.value));
     }
 
+    @Override
+    public String toString(){
+        return type+"_"+id+"="+value;
+    }
 
 }

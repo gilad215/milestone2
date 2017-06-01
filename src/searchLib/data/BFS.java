@@ -22,8 +22,8 @@ public class BFS<T> extends CommonSearcher<T>{
             {
                 return backTrace(s.getGoalState());
             }
-            HashMap<Action,State<T>> map=s.getAllPossibleMoves(n);
-            for (Action act:map.keySet()) {
+            HashMap<SearchAction,State<T>> map=s.getAllPossibleMoves(n);
+            for (SearchAction act:map.keySet()) {
                 State<T> state=map.get(act);
                 if(!closedSet.contains(state) && !openList.contains(state))
                 {
