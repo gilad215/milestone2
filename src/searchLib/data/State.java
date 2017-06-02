@@ -1,8 +1,8 @@
 package searchLib.data;
 
-public class State<T> {
+public class State<T> implements Comparable<State<T>> {
     private T state;
-    private double cost;
+    private int cost;
     private State<T> cameFrom;
     private SearchAction action;
 
@@ -14,12 +14,13 @@ public class State<T> {
     public void setState(T state) {
         this.state = state;
     }
-    public double getCost() {
+    public int getCost() {
         return cost;
     }
-    public void setCost(double cost) {
+    public void setCost(int cost) {
         this.cost = cost;
     }
+    public void UpCost(){this.cost++;}
     public State<T> getCameFrom() {
         return cameFrom;
     }
@@ -51,5 +52,10 @@ public class State<T> {
 
     public void setAction(SearchAction action) {
         this.action = action;
+    }
+
+    @Override
+    public int compareTo(State<T> o) {
+        return getCost()-o.getCost();
     }
 }

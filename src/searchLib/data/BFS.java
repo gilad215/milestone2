@@ -6,10 +6,11 @@ import java.util.PriorityQueue;
 
 public class BFS<T> extends CommonSearcher<T>{
     protected PriorityQueue<State> openList;
-    private int evaluatedNodes;
+    private int evaluatedNodes=0;
 
     @Override
     public Solution search(Searchable<T> s) {
+        openList=new PriorityQueue<>();
         openList.add(s.getInitialState());
         HashSet<State> closedSet=new HashSet<>();
 
@@ -23,6 +24,7 @@ public class BFS<T> extends CommonSearcher<T>{
                 return backTrace(s.getGoalState());
             }
             HashMap<SearchAction,State<T>> map=s.getAllPossibleMoves(n);
+            System.out.println(map);
             for (SearchAction act:map.keySet()) {
                 State<T> state=map.get(act);
                 if(!closedSet.contains(state) && !openList.contains(state))
@@ -53,6 +55,9 @@ public class BFS<T> extends CommonSearcher<T>{
 
         return null;
     }
+
+
+
     protected State<T> popOpenList()
     {
         evaluatedNodes++;

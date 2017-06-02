@@ -18,4 +18,9 @@ public class SearchAction {
         return act.hashCode();
     }
 
+    public String toString()
+    {
+        return act;
+    }
+
 }
