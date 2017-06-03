@@ -1,6 +1,8 @@
 package model.data;
 
 
+import java.util.Objects;
+
 public class Point {
     private int x;
     private int y;
@@ -36,16 +38,32 @@ public class Point {
         this.x=x;
         this.y=y;
     }
-    public String getPoint()
+//    public String getPoint()
+//    {
+//        return ("("+x+","+y+")");
+//    }
+    public String toString()
     {
         return ("("+x+","+y+")");
     }
 
 
-    public boolean equals(Point p)
+    @Override
+    public boolean equals(Object o) {
+
+        Point p=(Point)o;
+        return x==p.getX() && y==p.getY();
+    }
+
+        public boolean equals(Point p)
     {
         if(x==p.getX() && y==p.getY()) return true;
         else return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x,y);
     }
 
 }

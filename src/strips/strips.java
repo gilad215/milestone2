@@ -36,7 +36,8 @@ public class strips implements Planner
                         for (Predicate p : ((Clause) top).predicates) {
                             stack.push(p);
                         }
-                    } else // single unsatisfied
+                    }
+                    else // single unsatisfied
                     {
                         stack.pop();
                         Action action = plannable.getSatisfyingAction(top);

@@ -9,6 +9,8 @@ public class SokobanPlannable implements Plannable {
     private Level level;
     private Clause goals;
     private SokoPredicate Player;
+    private int boxCount=0;
+    private int goalCount=0;
 
 
     public SokobanPlannable(Level level)
@@ -42,8 +44,7 @@ public class SokobanPlannable implements Plannable {
     @Override
     public Clause getKnowledgeBase() {
         Clause kb=new Clause(null);
-        int boxCount=0;
-        int goalCount=0;
+
         if(level.getBoard().isEmpty()) return null;
         for (int i = 0; i < level.getBoard().size(); i++) {
             for (int j = 0; j < level.getBoard().get(i).size(); j++)
@@ -84,6 +85,9 @@ public class SokobanPlannable implements Plannable {
 
 
 
+
+
+
         return null;
     }
 
@@ -96,4 +100,22 @@ public class SokobanPlannable implements Plannable {
     {
         return this.level.getBoard();
     }
+
+
+    public int getBoxCount() {
+        return boxCount;
+    }
+
+    public void setBoxCount(int boxCount) {
+        this.boxCount = boxCount;
+    }
+
+    public int getGoalCount() {
+        return goalCount;
+    }
+
+    public void setGoalCount(int goalCount) {
+        this.goalCount = goalCount;
+    }
+
 }

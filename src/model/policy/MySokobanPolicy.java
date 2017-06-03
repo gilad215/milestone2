@@ -2,6 +2,7 @@ package model.policy;
 
 import model.data.Level;
 import model.data.Point;
+
 import java.util.ArrayList;
 
 public class MySokobanPolicy implements Policy {
@@ -10,7 +11,7 @@ public class MySokobanPolicy implements Policy {
     private boolean moveMade=true;
     private int playerY;
     private int playerX;
-    private Point PlayerPoint;
+    private Point playerPoint;
 
     public MySokobanPolicy(Level l)
     {
@@ -47,13 +48,13 @@ public class MySokobanPolicy implements Policy {
                             }
                             case ('o'): {
                                 lvl.getBoard().get(playerY - 1).set(playerX, 'A');
-                                if (isGoal(PlayerPoint)) lvl.getBoard().get(playerY).set(playerX, 'o');
+                                if (isGoal(playerPoint)) lvl.getBoard().get(playerY).set(playerX, 'o');
                                 else lvl.getBoard().get(playerY).set(playerX, ' ');
                                 break;
                             }
                             case (' '):
                                 lvl.getBoard().get(playerY - 1).set(playerX, 'A');
-                                if (isGoal(PlayerPoint)) lvl.getBoard().get(playerY).set(playerX, 'o');
+                                if (isGoal(playerPoint)) lvl.getBoard().get(playerY).set(playerX, 'o');
                                 else lvl.getBoard().get(playerY).set(playerX, ' ');
                                 break;
 
@@ -71,7 +72,7 @@ public class MySokobanPolicy implements Policy {
                                 if (lvl.getBoard().get(playerY - 2).get(playerX).equals(' ')) {
                                     lvl.getBoard().get(playerY - 2).set(playerX, '@');
                                     lvl.getBoard().get(playerY - 1).set(playerX, 'A');
-                                    if (isGoal(PlayerPoint)) {
+                                    if (isGoal(playerPoint)) {
                                         lvl.getBoard().get(playerY).set(playerX, 'o');
                                     } else lvl.getBoard().get(playerY).set(playerX, ' ');
                                     break;
@@ -79,7 +80,7 @@ public class MySokobanPolicy implements Policy {
                                 if (lvl.getBoard().get(playerY - 2).get(playerX).equals('o')) {
                                     lvl.getBoard().get(playerY - 2).set(playerX, '@');
                                     lvl.getBoard().get(playerY - 1).set(playerX, 'A');
-                                    if (isGoal(PlayerPoint)) {
+                                    if (isGoal(playerPoint)) {
                                         lvl.getBoard().get(playerY).set(playerX, 'o');
                                     } else lvl.getBoard().get(playerY).set(playerX, ' ');
                                     break;
@@ -101,13 +102,13 @@ public class MySokobanPolicy implements Policy {
                             }
                             case ('o'): {
                                 lvl.getBoard().get(playerY + 1).set(playerX, 'A');
-                                if (isGoal(PlayerPoint)) lvl.getBoard().get(playerY).set(playerX, 'o');
+                                if (isGoal(playerPoint)) lvl.getBoard().get(playerY).set(playerX, 'o');
                                 else lvl.getBoard().get(playerY).set(playerX, ' ');
                                 break;
                             }
                             case (' '): {
                                 lvl.getBoard().get(playerY + 1).set(playerX, 'A');
-                                if (isGoal(PlayerPoint)) {
+                                if (isGoal(playerPoint)) {
                                     lvl.getBoard().get(playerY).set(playerX, 'o');
                                 } else {
                                     lvl.getBoard().get(playerY).set(playerX, ' ');
@@ -129,7 +130,7 @@ public class MySokobanPolicy implements Policy {
                                 if (lvl.getBoard().get(playerY + 2).get(playerX).equals(' ')) {
                                     lvl.getBoard().get(playerY + 2).set(playerX, '@');
                                     lvl.getBoard().get(playerY + 1).set(playerX, 'A');
-                                    if (isGoal(PlayerPoint)) {
+                                    if (isGoal(playerPoint)) {
                                         lvl.getBoard().get(playerY).set(playerX, 'o');
                                     } else lvl.getBoard().get(playerY).set(playerX, ' ');
                                     break;
@@ -137,7 +138,7 @@ public class MySokobanPolicy implements Policy {
                                 if (lvl.getBoard().get(playerY + 2).get(playerX).equals('o')) {
                                     lvl.getBoard().get(playerY + 2).set(playerX, '@');
                                     lvl.getBoard().get(playerY + 1).set(playerX, 'A');
-                                    if (isGoal(PlayerPoint)) {
+                                    if (isGoal(playerPoint)) {
                                         lvl.getBoard().get(playerY).set(playerX, 'o');
                                     } else lvl.getBoard().get(playerY).set(playerX, ' ');
                                     break;
@@ -158,13 +159,13 @@ public class MySokobanPolicy implements Policy {
                             }
                             case ('o'): {
                                 lvl.getBoard().get(playerY).set(playerX + 1, 'A');
-                                if (isGoal(PlayerPoint)) lvl.getBoard().get(playerY).set(playerX, 'o');
+                                if (isGoal(playerPoint)) lvl.getBoard().get(playerY).set(playerX, 'o');
                                 else lvl.getBoard().get(playerY).set(playerX, ' ');
                                 break;
                             }
                             case (' '): {
                                 lvl.getBoard().get(playerY).set(playerX + 1, 'A');
-                                if (isGoal(PlayerPoint)) {
+                                if (isGoal(playerPoint)) {
                                     lvl.getBoard().get(playerY).set(playerX, 'o');
                                 } else {
                                     lvl.getBoard().get(playerY).set(playerX, ' ');
@@ -186,7 +187,7 @@ public class MySokobanPolicy implements Policy {
                                 if (lvl.getBoard().get(playerY).get(playerX + 2).equals(' ')) {
                                     lvl.getBoard().get(playerY).set(playerX + 2, '@');
                                     lvl.getBoard().get(playerY).set(playerX + 1, 'A');
-                                    if (isGoal(PlayerPoint)) {
+                                    if (isGoal(playerPoint)) {
                                         lvl.getBoard().get(playerY).set(playerX, 'o');
                                     } else lvl.getBoard().get(playerY).set(playerX, ' ');
                                     break;
@@ -194,7 +195,7 @@ public class MySokobanPolicy implements Policy {
                                 if (lvl.getBoard().get(playerY).get(playerX + 2).equals('o')) {
                                     lvl.getBoard().get(playerY).set(playerX + 2, '@');
                                     lvl.getBoard().get(playerY).set(playerX + 1, 'A');
-                                    if (isGoal(PlayerPoint)) {
+                                    if (isGoal(playerPoint)) {
                                         lvl.getBoard().get(playerY).set(playerX, 'o');
                                     } else lvl.getBoard().get(playerY).set(playerX, ' ');
                                     break;
@@ -215,13 +216,13 @@ public class MySokobanPolicy implements Policy {
                             }
                             case ('o'): {
                                 lvl.getBoard().get(playerY).set(playerX - 1, 'A');
-                                if (isGoal(PlayerPoint)) lvl.getBoard().get(playerY).set(playerX, 'o');
+                                if (isGoal(playerPoint)) lvl.getBoard().get(playerY).set(playerX, 'o');
                                 else lvl.getBoard().get(playerY).set(playerX, ' ');
                                 break;
                             }
                             case (' '): {
                                 lvl.getBoard().get(playerY).set(playerX - 1, 'A');
-                                if (isGoal(PlayerPoint)) {
+                                if (isGoal(playerPoint)) {
                                     lvl.getBoard().get(playerY).set(playerX, 'o');
                                 } else {
                                     lvl.getBoard().get(playerY).set(playerX, ' ');
@@ -243,7 +244,7 @@ public class MySokobanPolicy implements Policy {
                                 if (lvl.getBoard().get(playerY).get(playerX - 2).equals(' ')) {
                                     lvl.getBoard().get(playerY).set(playerX - 2, '@');
                                     lvl.getBoard().get(playerY).set(playerX - 1, 'A');
-                                    if (isGoal(PlayerPoint)) {
+                                    if (isGoal(playerPoint)) {
                                         lvl.getBoard().get(playerY).set(playerX, 'o');
                                     } else lvl.getBoard().get(playerY).set(playerX, ' ');
                                     break;
@@ -251,7 +252,7 @@ public class MySokobanPolicy implements Policy {
                                 if (lvl.getBoard().get(playerY).get(playerX - 2).equals('o')) {
                                     lvl.getBoard().get(playerY).set(playerX - 2, '@');
                                     lvl.getBoard().get(playerY).set(playerX - 1, 'A');
-                                    if (isGoal(PlayerPoint)) {
+                                    if (isGoal(playerPoint)) {
                                         lvl.getBoard().get(playerY).set(playerX, 'o');
                                     } else lvl.getBoard().get(playerY).set(playerX, ' ');
                                     break;
@@ -265,7 +266,7 @@ public class MySokobanPolicy implements Policy {
 
     private boolean isGoal(Point p) {
         for (Point g:Goals) {
-            if(g.getPoint().equals(p.getPoint())) return true;
+            if(g.toString().equals(p.toString())) return true;
         }
         return false;}
 
@@ -297,9 +298,9 @@ public class MySokobanPolicy implements Policy {
             System.out.println("Level is invalid.");
             return;
         }
-        PlayerPoint=new Point(playerX,playerY);
+        playerPoint =new Point(playerX,playerY);
     }
-    public Point getPlayer() {return PlayerPoint;}
+    public Point getPlayer() {return playerPoint;}
     public boolean moveMade(){return moveMade;}
 
 

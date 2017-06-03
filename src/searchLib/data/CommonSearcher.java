@@ -14,6 +14,7 @@ public abstract class CommonSearcher<T> implements Searcher<T> {
         State<T> currState=goalState;
         while(currState.getCameFrom()!=null)
         {
+            System.out.println("Goal has Trace");
             actions.addFirst(currState.getAction());
             currState=currState.getCameFrom();
         }
