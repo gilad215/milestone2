@@ -19,7 +19,9 @@ public class TestMain {
         System.out.println(goals.getValue());
 
         Point test=new Point(3,1);
-        SokobanSearchable<Point> searchable=new SokobanSearchable<>(loader.getLvl(),"soko",new Point(2,1),new Point(1,3));
+        //SokobanSearchable<Point> searchable=new SokobanSearchable<>(loader.getLvl(),"box",new Point(2,2),new Point(1,3));
+        SokobanSearchable<Point> searchable=new SokobanSearchable<>(loader.getLvl(),"box",new Point(2,2),new Point(3,1));
+
         BFS<Point> searcher=new BFS<>();
         Solution sol=searcher.search(searchable);
         System.out.println(sol.getActions().toString());
