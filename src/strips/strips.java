@@ -33,8 +33,9 @@ public class strips implements Planner
             if (!(top instanceof Action)) {
                 if (!plannable.getKnowledgeBase().satisfies(top)) {
                     if (top instanceof Clause) {
+                        //stack.pop();
                         for (Predicate p : ((Clause) top).predicates) {
-                            stack.push(p);
+                            if(!plannable.getKnowledgeBase().satisfies(p)) stack.push(p);
                         }
                     }
                     else // single unsatisfied
@@ -42,7 +43,7 @@ public class strips implements Planner
                         stack.pop();
                         Action action = plannable.getSatisfyingAction(top);
                         stack.push(action);
-                        stack.push(action.preconditions);
+                        stack.push(action.getPreconditions());
 
                     }
                 } else
@@ -51,7 +52,7 @@ public class strips implements Planner
 
             } else {
                 Action a = (Action) stack.pop();
-                plannable.getKnowledgeBase().update(a.effects);
+                plannable.getKnowledgeBase().update(a.getEffects());
                 plan.add(a);
             }
 
