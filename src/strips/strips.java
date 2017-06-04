@@ -27,6 +27,7 @@ public class strips implements Planner
         LinkedList<Action> plan = new LinkedList<Action>();
         this.plannable = plannable;
         Stack<Predicate> stack = new Stack<Predicate>();
+        //System.out.println("GOALS TO SATISFY:"+plannable.getGoal().toString());
         stack.push(plannable.getGoal());
         while (!stack.isEmpty()) {
             Predicate top = stack.peek();
@@ -40,10 +41,23 @@ public class strips implements Planner
                     }
                     else // single unsatisfied
                     {
-                        stack.pop();
-                        Action action = plannable.getSatisfyingAction(top);
-                        stack.push(action);
-                        stack.push(action.getPreconditions());
+                        Predicate reserve=stack.pop();
+                        List<Action> actions=null;
+                         actions= plannable.getSatisfyingActions(top);
+                        if(actions!=null) {
+                            for (Action action : actions) {
+                                stack.push(action);
+                                stack.push(action.getPreconditions());
+                            }
+                        }
+                        else
+                        {
+                            System.out.println("Could not satisfy Goal, trying to swap goals");
+                            Predicate swap=stack.pop();
+                            System.out.println("Trying to SOLVE:"+swap.toString()+" Instead");
+                            stack.push(top);
+                            stack.push(swap);
+                        }
 
                     }
                 } else

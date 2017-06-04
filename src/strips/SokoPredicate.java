@@ -8,18 +8,6 @@ public class SokoPredicate extends Predicate{
 
     }
 
-    public int getX()
-    {
-        String[] arr=value.split(",");
-
-        return Integer.parseInt(arr[0]);
-    }
-    public int getY()
-    {
-        String[] arr=value.split(",");
-
-        return Integer.parseInt(arr[1]);
-    }
 
     @Override
     public boolean contradicts(Predicate p)

@@ -27,6 +27,8 @@ public class Predicate {
 
     String type, id, value;
 
+    public Predicate(){}
+
     public Predicate(String type, String id, String value) {
         super();
         this.type = type;
@@ -46,6 +48,19 @@ public class Predicate {
     @Override
     public String toString(){
         return type+"_"+id+"="+value;
+    }
+
+    public int getX()
+    {
+        String[] arr=value.split(",");
+
+        return Integer.parseInt(arr[0]);
+    }
+    public int getY()
+    {
+        String[] arr=value.split(",");
+
+        return Integer.parseInt(arr[1]);
     }
 
 }

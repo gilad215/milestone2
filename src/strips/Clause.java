@@ -86,4 +86,6 @@ public class Clause extends Predicate {
     {
         return (type.equals(p.type) && (id.equals(p.id) && value.equals(p.value)));
     }
+
+
 }

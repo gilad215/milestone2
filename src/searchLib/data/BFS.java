@@ -14,6 +14,7 @@ public class BFS<T> extends CommonSearcher<T>{
         openList.add(s.getInitialState());
         HashSet<State> closedSet=new HashSet<>();
         int iteration=0;
+        Solution sol;
 
         while(openList.size()>0)
         {
@@ -27,8 +28,9 @@ public class BFS<T> extends CommonSearcher<T>{
             if(n.equals(s.getGoalState()))
             {
                 System.out.println("FOUND GOAL");
-                System.out.println("CAME FROM: "+n.getCameFrom().toString());
-                return backTrace(n);
+                if(!n.getCameFrom().getState().toString().isEmpty()) System.out.println("CAME FROM: "+n.getCameFrom().toString());
+                sol=backTrace(n);
+                return sol;
             }
             HashMap<SearchAction,State<T>> map=s.getAllPossibleMoves(n);
             System.out.println("POSSIBLE MOVES: "+map);
@@ -50,7 +52,7 @@ public class BFS<T> extends CommonSearcher<T>{
                         State<T> temp = null;
                         for (State<T> f : openList) {
                             if (f.equals(state)) {
-                                temp = f;
+                                temp = new State(f);
                                 break;
                             }
                             if (temp != null && state.getCost() < temp.getCost()) {

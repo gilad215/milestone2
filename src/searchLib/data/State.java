@@ -58,4 +58,5 @@ public class State<T> implements Comparable<State<T>> {
     public int compareTo(State<T> o) {
         return getCost()-o.getCost();
     }
+
 }
