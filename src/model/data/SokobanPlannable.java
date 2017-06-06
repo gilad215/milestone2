@@ -88,42 +88,71 @@ public class SokobanPlannable implements Plannable {
                 boxes.add(new Point(p.getX(),p.getY()));
             }
         }
-        Solution boxSolution=new Solution();
         Solution sokoSolution=new Solution();
 
         PriorityQueue<Solution> possibleSolutions=new PriorityQueue<>();
         for (Point box:boxes) {
             System.out.println("Searching for GOAL on X:"+a.getX()+" Y:"+a.getY());
             Solution boxPath=Path("boxAt",box,new Point(a.getX(),a.getY()));
+            System.out.println("WE HAVE A SOLUTION IN HAND ~~~~~~~~~~~~~~~~~~~~~~");
            if(boxPath!=null) {
-                   String firstAction = boxPath.getActions().get(0).toString();
+               Point finalbox=box;
+               Point sokoPos=getSoko();
+               for (Object searchAction:boxPath.getActions()) {
+                   SearchAction action=(SearchAction)searchAction;
                    Point boxPush = null;
-                   switch (firstAction) {
+                   System.out.println("box action is :"+action.toString());
+                   switch (action.toString()) {
                        case ("right"): {
-                           boxPush = new Point(box.getX() - 1, box.getY());
+                           boxPush = new Point(finalbox.getX() - 1, finalbox.getY());
+                           finalbox.setX(finalbox.getX()+1);
                            break;
                        }
                        case ("left"): {
-                           boxPush = new Point(box.getX() + 1, box.getY());
+                           boxPush = new Point(finalbox.getX() + 1, finalbox.getY());
+                           finalbox.setX(finalbox.getX()-1);
                            break;
                        }
                        case ("up"): {
-                           boxPush = new Point(box.getX(), box.getY() + 1);
+                           boxPush = new Point(finalbox.getX(), finalbox.getY() + 1);
+                           finalbox.setY(finalbox.getY()-1);
                            break;
                        }
                        case ("down"): {
-                           boxPush = new Point(box.getX(), box.getY() - 1);
+                           boxPush = new Point(finalbox.getX(), finalbox.getY() - 1);
+                           finalbox.setY(finalbox.getY()+1);
                            break;
                        }
                    }
-
-                   Solution sokoPath = Path("sokobanAt", getSoko(), boxPush);
+                   Solution sokoPath = Path("sokobanAt", sokoPos, boxPush);
                    if (sokoPath.actionSize() != 0) {
-                       boxSolution.setActions(boxPath.getActions());
-                       sokoSolution.setActions(sokoPath.getActions());
+                       sokoSolution.addToActions(sokoPath.getActions());
+                       sokoSolution.addToActions(action);
+                       for (Object sa:sokoSolution.getActions()) {
+                           SearchAction saction=(SearchAction)sa;
+                           switch (saction.toString())
+                           {
+                               case ("right"): {
+                                   sokoPos.setX(sokoPos.getX()+1);
+                                   break;
+                               }
+                               case ("left"): {
+                                   sokoPos.setX(sokoPos.getX()-1);
+                                   break;
+                               }
+                               case ("up"): {
+                                   sokoPos.setY(sokoPos.getY()-1);
+                                   break;
+                               }
+                               case ("down"): {
+                                   sokoPos.setY(sokoPos.getY()+1);
+                                   break;
+                               }
+                           }
+                       }
+                    }
 
-                       possibleSolutions.add(new Solution(sokoPath, boxPath));
-                   }
+               }
 
            }
            else System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Didnt find solution for box:" + box.toString()+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -132,10 +161,11 @@ public class SokobanPlannable implements Plannable {
 
 
 
-        if(!possibleSolutions.isEmpty()) {
+        if(!sokoSolution.getActions().isEmpty()) {
             List<SearchAction> sokoActions=sokoSolution.getActions();
-            List<SearchAction> boxActions=boxSolution.getActions();
-
+            System.out.println("~~~~~~~~~~~~OUR FINAL ACTIONS ~~~~~~~~~~~~");
+            System.out.println(sokoActions.toString());
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             List<Action> actions=new ArrayList<>();
 
             Point sokobanPos=getSoko();
@@ -179,44 +209,6 @@ public class SokobanPlannable implements Plannable {
                 actions.add(predicate);
 
             }
-            for (SearchAction sAction:boxActions) {
-
-                Action predicate=new Action();
-                predicate.setAct(sAction.getAct());
-                switch(sAction.getAct()) {
-                    case ("right"): {
-                        predicate.setPreconditions(new Clause(new SokoPredicate("clearAt", "", (sokobanPos.getX() + 1) + "," + sokobanPos.getY()), new SokoPredicate("clearAt", "", (sokobanPos.getX() + 2) + "," + sokobanPos.getY())));
-                        predicate.setEffects(new Clause(new SokoPredicate("clearAt", "", sokobanPos.getX() + "," + sokobanPos.getY()), new SokoPredicate("clearAt", "", (sokobanPos.getX() + 1) + "," + sokobanPos.getY()),
-                                new SokoPredicate("boxAt", "?", (sokobanPos.getX() + 2) + "," + sokobanPos.getY()), new SokoPredicate("sokobanAt", "", (sokobanPos.getX() + 1) + "," + sokobanPos.getY())));
-                        sokobanPos.setX(sokobanPos.getX() + 1);
-                        break;
-                    }
-                    case ("left"): {
-                        predicate.setPreconditions(new Clause(new SokoPredicate("clearAt", "", (sokobanPos.getX() - 1) + "," + sokobanPos.getY()), new SokoPredicate("clearAt", "", (sokobanPos.getX() - 2) + "," + sokobanPos.getY())));
-                        predicate.setEffects(new Clause(new SokoPredicate("clearAt", "", sokobanPos.getX() + "," + sokobanPos.getY()), new SokoPredicate("clearAt", "", (sokobanPos.getX() - 1) + "," + sokobanPos.getY()),
-                                new SokoPredicate("boxAt", "?", (sokobanPos.getX() - 2) + "," + sokobanPos.getY()), new SokoPredicate("sokobanAt", "", (sokobanPos.getX() - 1) + "," + sokobanPos.getY())));
-                        sokobanPos.setX(sokobanPos.getX() - 1);
-                        break;
-                    }
-                    case ("up"): {
-                        predicate.setPreconditions(new Clause(new SokoPredicate("clearAt", "", sokobanPos.getX() + "," + (sokobanPos.getY()-1)), new SokoPredicate("clearAt", "", sokobanPos.getX() + "," + (sokobanPos.getY()-2))));
-                        predicate.setEffects(new Clause(new SokoPredicate("clearAt", "", sokobanPos.getX() + "," + sokobanPos.getY()), new SokoPredicate("clearAt", "", sokobanPos.getX() + "," + (sokobanPos.getY()-1)),
-                                new SokoPredicate("boxAt", "?", sokobanPos.getX() + "," + (sokobanPos.getY()-2)), new SokoPredicate("sokobanAt", "", sokobanPos.getX() + "," + (sokobanPos.getY()-1))));
-                        sokobanPos.setY(sokobanPos.getY()-1);
-                        break;
-                    }
-                    case ("down"): {
-                        predicate.setPreconditions(new Clause(new SokoPredicate("clearAt", "", sokobanPos.getX() + "," + (sokobanPos.getY()+1)), new SokoPredicate("clearAt", "", sokobanPos.getX() + "," + (sokobanPos.getY()+2))));
-                        predicate.setEffects(new Clause(new SokoPredicate("clearAt", "", sokobanPos.getX() + "," + sokobanPos.getY()), new SokoPredicate("clearAt", "", sokobanPos.getX() + "," + (sokobanPos.getY()+1)),
-                                new SokoPredicate("boxAt", "?", sokobanPos.getX() + "," + (sokobanPos.getY()+2)), new SokoPredicate("sokobanAt", "", sokobanPos.getX() + "," + (sokobanPos.getY()+1))));
-                        sokobanPos.setY(sokobanPos.getY()+1);
-                        break;
-                    }
-
-                }
-                actions.add(predicate);
-            }
-
             return actions;
         }
 
@@ -230,7 +222,11 @@ public class SokobanPlannable implements Plannable {
 
         if (type.equals("boxAt")){
             System.out.println("Searching for BOX PATH"); Search = new SokobanSearchable<>(level, "box", initial, target);}
-        if (type.equals("sokobanAt")) Search = new SokobanSearchable<>(level, "soko", initial, target);
+        if (type.equals("sokobanAt")) {
+            System.out.println("SEARCHING FOR SOKO MY LOVELY HERO~~~~~~~~~~~~~~~~");
+            System.out.println("INITIAL SOKO POS:" + initial.toString() + " TARGET BOX POS:" + target.toString());
+            Search = new SokobanSearchable<>(level, "soko", initial, target);
+        }
 
         BFS<Point> searcher = new BFS<>();
         if (Search != null) {

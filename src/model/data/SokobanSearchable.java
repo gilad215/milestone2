@@ -36,13 +36,13 @@ public class SokobanSearchable<T> implements Searchable<T> {
     @Override
     public HashMap<SearchAction, State> getAllPossibleMoves(State s) {
         Point point=(Point)s.getState();
-        System.out.println("looking for states around: "+point.toString());
+        System.out.println("looking for states around: "+point.toString()+"Which is: "+level.getBoard().get(point.getY()).get(point.getX()).toString());
 
         if(Objects.equals(getType(), "box")) {
             switch (level.getBoard().get(point.getY()).get(point.getX() - 1)) //Checks Left
             {
                 case (' '): {
-                    if (clearAt(point.getX() + 1, point.getY()) || goalAt(point.getX() + 1, point.getY()) || sokoAt(point.getX() + 1, point.getY())) {
+                    if (clearAt(point.getX() + 1, point.getY()) || goalAt(point.getX() + 1, point.getY()) || sokoAt(point.getX() + 1, point.getY()) || equalsToInitial(new Point(point.getX() + 1, point.getY()))) {
                         State<Point> possibleState = new State<>(new Point(point.getX() - 1, point.getY()));
                         moves.put(new SearchAction("left"), possibleState);
                         break;
@@ -50,7 +50,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
                     break;
                 }
                 case ('o'): {
-                    if (clearAt(point.getX() + 1, point.getY()) || goalAt(point.getX() + 1, point.getY()) || sokoAt(point.getX() + 1, point.getY())) {
+                    if (clearAt(point.getX() + 1, point.getY()) || goalAt(point.getX() + 1, point.getY()) || sokoAt(point.getX() + 1, point.getY()) || equalsToInitial(new Point(point.getX() + 1, point.getY()))) {
                         State<Point> possibleState = new State<>(new Point(point.getX() - 1, point.getY()));
                         moves.put(new SearchAction("left"), possibleState);
                         break;
@@ -61,7 +61,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
             switch (level.getBoard().get(point.getY()).get(point.getX() +1)) //Checks Right
             {
                 case (' '): {
-                    if (clearAt(point.getX() - 1, point.getY()) || goalAt(point.getX() - 1, point.getY()) || sokoAt(point.getX() - 1, point.getY())) {
+                    if (clearAt(point.getX() - 1, point.getY()) || goalAt(point.getX() - 1, point.getY()) || sokoAt(point.getX() - 1, point.getY()) || equalsToInitial(new Point(point.getX() - 1, point.getY()))) {
                         State<Point> possibleState = new State<>(new Point(point.getX() + 1, point.getY()));
                         moves.put(new SearchAction("right"), possibleState);
                         break;
@@ -69,7 +69,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
                     break;
                 }
                 case ('o'): {
-                    if (clearAt(point.getX() - 1, point.getY()) || goalAt(point.getX() - 1, point.getY()) || sokoAt(point.getX() - 1, point.getY())) {
+                    if (clearAt(point.getX() - 1, point.getY()) || goalAt(point.getX() - 1, point.getY()) || sokoAt(point.getX() - 1, point.getY()) || equalsToInitial(new Point(point.getX() - 1, point.getY()))) {
                         State<Point> possibleState = new State<>(new Point(point.getX() + 1, point.getY()));
                         moves.put(new SearchAction("right"), possibleState);
                         break;
@@ -80,7 +80,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
             switch (level.getBoard().get(point.getY()-1).get(point.getX())) //Checks Up
             {
                 case (' '): {
-                    if (clearAt(point.getX(), point.getY()+1) || goalAt(point.getX(), point.getY()+1) || sokoAt(point.getX(), point.getY()+1)) {
+                    if (clearAt(point.getX(), point.getY()+1) || goalAt(point.getX(), point.getY()+1) || sokoAt(point.getX(), point.getY()+1) || equalsToInitial(new Point(point.getX(), point.getY()+1))) {
                         State<Point> possibleState = new State<>(new Point(point.getX(), point.getY()-1));
                         moves.put(new SearchAction("up"), possibleState);
                         break;
@@ -88,7 +88,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
                     break;
                 }
                 case ('o'): {
-                    if (clearAt(point.getX(), point.getY()+1) || goalAt(point.getX(), point.getY()+1) || sokoAt(point.getX(), point.getY()+1)) {
+                    if (clearAt(point.getX(), point.getY()+1) || goalAt(point.getX(), point.getY()+1) || sokoAt(point.getX(), point.getY()+1) || equalsToInitial(new Point(point.getX(), point.getY()+1))) {
                         State<Point> possibleState = new State<>(new Point(point.getX(), point.getY()-1));
                         moves.put(new SearchAction("up"), possibleState);
                         break;
@@ -99,7 +99,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
             switch (level.getBoard().get(point.getY()+1).get(point.getX())) //Checks Down
             {
                 case (' '): {
-                    if (clearAt(point.getX(), point.getY()-1) || goalAt(point.getX(), point.getY()-1) || sokoAt(point.getX(), point.getY()-1)) {
+                    if (clearAt(point.getX(), point.getY()-1) || goalAt(point.getX(), point.getY()-1) || sokoAt(point.getX(), point.getY()-1) || equalsToInitial(new Point(point.getX(), point.getY()-1))) {
                         State<Point> possibleState = new State<>(new Point(point.getX(), point.getY()+1));
                         moves.put(new SearchAction("down"), possibleState);
                         break;
@@ -107,7 +107,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
                     break;
                 }
                 case ('o'): {
-                    if (clearAt(point.getX(), point.getY()-1) || goalAt(point.getX(), point.getY()-1) || sokoAt(point.getX(), point.getY()-1)) {
+                    if (clearAt(point.getX(), point.getY()-1) || goalAt(point.getX(), point.getY()-1) || sokoAt(point.getX(), point.getY()-1) || equalsToInitial(new Point(point.getX(), point.getY()-1))) {
                         State<Point> possibleState = new State<>(new Point(point.getX(), point.getY()+1));
                         moves.put(new SearchAction("down"), possibleState);
                         break;
@@ -253,6 +253,11 @@ public class SokobanSearchable<T> implements Searchable<T> {
     private boolean boxAt(int x, int y)
     {
         return level.getBoard().get(y).get(x).equals('@');
+    }
+    private boolean equalsToInitial(Point p)
+    {
+        Point initial=(Point)getInitialState().getState();
+        return initial.equals(p);
     }
     private boolean goalAt(int x, int y)
     {

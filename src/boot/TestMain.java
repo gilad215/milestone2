@@ -13,10 +13,10 @@ import java.util.List;
 public class TestMain {
     public static void main(String[] args) {
 
-        SokoPredicate p=new SokoPredicate("boxAt","?","6,1");
+        SokoPredicate p=new SokoPredicate("boxAt","?","3,1");
 
 
-        MySokobanLoader loader=new MySokobanLoader("C:\\Users\\G-lad\\IdeaProjects\\milestone2\\Extras\\level2.txt");
+        MySokobanLoader loader=new MySokobanLoader("C:\\Users\\G-lad\\IdeaProjects\\milestone2\\Extras\\levelg.txt");
         loader.load();
 //        SokobanPlannable sokobanPlannable=new SokobanPlannable(loader.getLvl());
 //        Clause goals=sokobanPlannable.getGoal();
@@ -31,10 +31,12 @@ public class TestMain {
 //        System.out.println(sol.getActions().toString());
 
         SokobanPlannable plannable=new SokobanPlannable(loader.getLvl());
-        Planner planner=new strips();
-        System.out.println(plannable.getGoal().toString());
-        List<Action> actions= planner.plan(plannable);
+        List<Action> actions=plannable.getSatisfyingActions(p);
         System.out.println(actions.toString());
+        //Planner planner=new strips();
+        //System.out.println(plannable.getGoal().toString());
+        //List<Action> actions= planner.plan(plannable);
+        //System.out.println(actions.toString());
 
     }
 }

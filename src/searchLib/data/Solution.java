@@ -14,7 +14,14 @@ public class Solution<T> implements Comparable<Solution> {
     public void setActions(List<SearchAction> actions) {
         this.actions = actions;
     }
-
+    public void addToActions(List<SearchAction> list)
+    {
+        actions.addAll(list);
+    }
+    public void addToActions(SearchAction act)
+    {
+        actions.add(act);
+    }
 
     public int actionSize()
     {
