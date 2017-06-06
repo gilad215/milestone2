@@ -27,44 +27,59 @@ public class strips implements Planner
         LinkedList<Action> plan = new LinkedList<Action>();
         this.plannable = plannable;
         Stack<Predicate> stack = new Stack<Predicate>();
+        Stack<Predicate> tempstack=new Stack<Predicate>();
         //System.out.println("GOALS TO SATISFY:"+plannable.getGoal().toString());
         stack.push(plannable.getGoal());
         while (!stack.isEmpty()) {
             Predicate top = stack.peek();
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~CURRENT STACK PEEK:"+top.toString());
             if (!(top instanceof Action)) {
                 if (!plannable.getKnowledgeBase().satisfies(top)) {
                     if (top instanceof Clause) {
-                        //stack.pop();
+                        System.out.println("CLAUSE POPPED");
                         for (Predicate p : ((Clause) top).predicates) {
                             if(!plannable.getKnowledgeBase().satisfies(p)) stack.push(p);
                         }
                     }
                     else // single unsatisfied
                     {
-                        Predicate reserve=stack.pop();
+                        Predicate reserve=null;
+                        if(!stack.isEmpty()) reserve=stack.peek();
+                        System.out.println("UNSATISFIED PREDICATE IN STRIPS:"+top.toString());
                         List<Action> actions=null;
                          actions= plannable.getSatisfyingActions(top);
                         if(actions!=null) {
+                            System.out.println("FOUND SATISFYING ACTIONS IN STRIPS");
                             for (Action action : actions) {
-                                stack.push(action);
-                                stack.push(action.getPreconditions());
+                                tempstack.push(action);
+                                System.out.println("PUSHING TO STACK:"+action.toString());
+                                if(action.getPreconditions()!=null)
+                                tempstack.push(action.getPreconditions());
                             }
+                            while(!tempstack.isEmpty())
+                            {
+                                stack.push(tempstack.pop());
+                            }
+                            System.out.println("STACK SIZE:"+stack.size());
                         }
-                        else
-                        {
-                            System.out.println("Could not satisfy Goal, trying to swap goals");
-                            Predicate swap=stack.pop();
-                            System.out.println("Trying to SOLVE:"+swap.toString()+" Instead");
-                            stack.push(top);
-                            stack.push(swap);
+                        else {
+                            if (!stack.isEmpty()) {
+                                System.out.println("Could not satisfy Goal, trying to swap goals");
+                                System.out.println("Trying to SOLVE:" + reserve.toString() + " Instead");
+                                stack.pop();
+                                stack.push(top);
+                                stack.push(reserve);
+                            }
                         }
 
                     }
-                } else
+                } else {
+                    System.out.println("Predicate is satisfied! popping out!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     stack.pop();
-
+                }
 
             } else {
+                System.out.println("POPPED ACTION OUT!~~~~~~~~~~~~~~~!~#!!$@#%#$^$&%*&#$^#$%@#$@#$@#&$^%*^%&");
                 Action a = (Action) stack.pop();
                 plannable.getKnowledgeBase().update(a.getEffects());
                 plan.add(a);

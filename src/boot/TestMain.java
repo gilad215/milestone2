@@ -13,10 +13,14 @@ import java.util.List;
 public class TestMain {
     public static void main(String[] args) {
 
-        SokoPredicate p=new SokoPredicate("boxAt","?","3,1");
+        SokoPredicate p = new SokoPredicate("boxAt", "?", "6,3");
+        SokoPredicate p1 = new SokoPredicate("boxAt", "?", "1,2");
+        SokoPredicate p2 = new SokoPredicate("boxAt", "?", "6,3");
+        SokoPredicate p3 = new SokoPredicate("boxAt", "?", "6,3");
 
 
-        MySokobanLoader loader=new MySokobanLoader("C:\\Users\\G-lad\\IdeaProjects\\milestone2\\Extras\\levelg.txt");
+
+        MySokobanLoader loader = new MySokobanLoader("C:\\Users\\G-lad\\IdeaProjects\\milestone2\\Extras\\level1.txt");
         loader.load();
 //        SokobanPlannable sokobanPlannable=new SokobanPlannable(loader.getLvl());
 //        Clause goals=sokobanPlannable.getGoal();
@@ -30,20 +34,24 @@ public class TestMain {
 //        Solution sol=searcher.search(searchable);
 //        System.out.println(sol.getActions().toString());
 
-        SokobanPlannable plannable=new SokobanPlannable(loader.getLvl());
-        List<Action> actions=plannable.getSatisfyingActions(p);
+        SokobanPlannable plannable = new SokobanPlannable(loader.getLvl());
+        List<Action> actions=plannable.getSatisfyingActions(p1);
+        //List<Action> actions1=plannable.getSatisfyingActions(p1);
+        //actions.addAll(actions1);
+
         int i=0;
         for (Action a:actions) {
             System.out.println("ACTION:"+i++);
-            System.out.println("PRECONDITIONS:"+a.getPreconditions().toString());
+            //System.out.println("PRECONDITIONS:"+a.getPreconditions().toString());
             System.out.println("EFFECTS:"+a.getEffects().toString());
             System.out.println("~~~~~~~~~~~~~~~");
 
-        }
-        //Planner planner=new strips();
-        //System.out.println(plannable.getGoal().toString());
-        //List<Action> actions= planner.plan(plannable);
-        //System.out.println(actions.toString());
+    }
+//
+//        Planner planner=new strips();
+//        System.out.println(plannable.getGoal().toString());
+//        List<Action> stripsactions= planner.plan(plannable);
+//        System.out.println(stripsactions.toString());
 
     }
 }

@@ -1,5 +1,6 @@
 package model.data;
 
+import model.policy.MySokobanPolicy;
 import searchLib.data.BFS;
 import searchLib.data.SearchAction;
 import searchLib.data.Solution;
@@ -16,12 +17,19 @@ public class SokobanPlannable implements Plannable {
     private SokoPredicate Player;
     private int boxCount=0;
     private int goalCount=0;
+    private MySokobanPolicy mySokobanPolicy;
+    private MySokobanDisplay display;
+    private MySokobanSaver saver;
+    private Solution finale=new Solution();
 
 
 
     public SokobanPlannable(Level lvl)
     {
         this.level=lvl;
+        mySokobanPolicy=new MySokobanPolicy(this.level);
+        display=new MySokobanDisplay(this.level);
+        saver=new MySokobanSaver(this.level,"C:\\Users\\G-lad\\IdeaProjects\\milestone2\\Extras\\levelplannable.txt");
         kb=new Clause(null);
 
         if(!level.getBoard().isEmpty()) {
@@ -82,6 +90,14 @@ public class SokobanPlannable implements Plannable {
     @Override
     public List<Action> getSatisfyingActions(Predicate top) {
         Predicate a=top;
+        if(Objects.equals(a.getType(), "clearAt"))
+        {
+            List<Action> zubi=new ArrayList<Action>();
+            Action act=new Action();
+            act.getEffects().add(top);
+            zubi.add(act);
+            return zubi;
+        }
         ArrayList<Point> boxes=new ArrayList<>();
         for (Predicate p:kb.getPredicates()) {
             if(p.getType().startsWith("box"))
@@ -91,7 +107,7 @@ public class SokobanPlannable implements Plannable {
         }
         Solution sokoSolution=new Solution();
 
-        PriorityQueue<Solution> possibleSolutions=new PriorityQueue<>();
+        //PriorityQueue<Solution> possibleSolutions=new PriorityQueue<>();
         for (Point box:boxes) {
             System.out.println("Searching for GOAL on X:"+a.getX()+" Y:"+a.getY());
             Solution boxPath=Path("boxAt",box,new Point(a.getX(),a.getY()));
@@ -127,8 +143,15 @@ public class SokobanPlannable implements Plannable {
                    }
                    Solution sokoPath = Path("sokobanAt", sokoPos, boxPush);
                    if (sokoPath.actionSize() != 0) {
+                       System.out.println("TO GET TO:"+boxPush.toString()+" WE DO:"+sokoPath.getActions().toString());
+                       ArrayList<SearchAction> lvlupdate=new ArrayList<>();
+                       lvlupdate.addAll(sokoPath.getActions());
+                       lvlupdate.add(action);
+                       updateLevel(lvlupdate);
                        sokoSolution.addToActions(sokoPath.getActions());
                        sokoSolution.addToActions(action);
+                       System.out.println("SOLUTION SO FAR:"+sokoSolution.getActions().toString());
+                       System.out.println("BOX IS NOW ON");
                        for (Object sa:sokoSolution.getActions()) {
                            SearchAction saction=(SearchAction)sa;
                            switch (saction.toString())
@@ -151,9 +174,13 @@ public class SokobanPlannable implements Plannable {
                                }
                            }
                        }
+                       System.out.println("SOKOBAN IS NOW HERE:"+sokoPos.toString()+"<<<------------------------------------------");
+                       finale.addToActions(sokoSolution.getActions());
+                       sokoSolution.getActions().clear();
                     }
 
                }
+
             break;
            }
            else System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Didnt find solution for box:" + box.toString()+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -162,8 +189,8 @@ public class SokobanPlannable implements Plannable {
 
 
 
-        if(!sokoSolution.getActions().isEmpty()) {
-            List<SearchAction> sokoActions=sokoSolution.getActions();
+        if(!finale.getActions().isEmpty()) {
+            List<SearchAction> sokoActions=finale.getActions();
             System.out.println("~~~~~~~~~~~~OUR FINAL ACTIONS ~~~~~~~~~~~~");
             System.out.println(sokoActions.toString());
             System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -203,6 +230,10 @@ public class SokobanPlannable implements Plannable {
                 actions.add(predicate);
 
             }
+            Action goalcomplete=new Action();
+            //goalcomplete.setPreconditions(new Clause(new SokoPredicate("clearAt","",top.getValue())));
+            goalcomplete.setEffects(new Clause(new SokoPredicate("boxAt","?",top.getValue())));
+            actions.add(goalcomplete);
             return actions;
         }
 
@@ -213,7 +244,8 @@ public class SokobanPlannable implements Plannable {
     {
         SokobanSearchable<Point> Search = null;
         Solution path=new Solution();
-
+        System.out.println("TYPE OF SEARCH IS:"+type);
+        System.out.println("GOAL IS:"+target.toString());
         if (type.equals("boxAt")){
             System.out.println("Searching for BOX PATH"); Search = new SokobanSearchable<>(level, "box", initial, target);}
         if (type.equals("sokobanAt")) {
@@ -228,6 +260,22 @@ public class SokobanPlannable implements Plannable {
         }
         //System.out.println("DEBUGGGGG"+path.toString());
         //if(!path.getActions().isEmpty()) return path;
+//        if(type.equals("sokobanAt"))
+//        {
+//            mySokobanPolicy=new MySokobanPolicy(level);
+//            display=new MySokobanDisplay(mySokobanPolicy.getLvl());
+//            display.display();
+//            for (Object act:path.getActions()) {
+//                SearchAction action=(SearchAction)act;
+//                System.out.println("MOVING "+action.getAct());
+//                mySokobanPolicy.Move(action.getAct());
+//                display.display();
+//            }
+//            this.level=mySokobanPolicy.getLvl();
+//
+
+//            }
+
         return path;
     }
 
@@ -243,71 +291,36 @@ public class SokobanPlannable implements Plannable {
         {
             case("right"):
             {
+                //action.getPreconditions().add();
                 action.setPreconditions(new Clause(new SokoPredicate("clearAt","",(soko.getX()+1)+","+soko.getY())));
-                if(level.getBoard().get(soko.getY()).get(soko.getX() + 1) =='@')
-                {
-                    action.setEffects(new Clause(new SokoPredicate("clearAt","",(soko.getX())+","+soko.getY()),new SokoPredicate("sokobanAt","",(soko.getX()+1)+","+soko.getY())
-                    ,new SokoPredicate("boxAt","?",(soko.getX()+2)+","+soko.getY())));
-                    soko.setX(soko.getX()+1);
-                    break;
-                }
-                else
-                {
                     action.setEffects(new Clause(new SokoPredicate("clearAt","",(soko.getX())+","+soko.getY()),new SokoPredicate("sokobanAt","",(soko.getX()+1)+","+soko.getY())));
                     soko.setX(soko.getX()+1);
                     break;
-                }
+
             }
             case("left"):
             {
                 action.setPreconditions(new Clause(new SokoPredicate("clearAt","",(soko.getX()-1)+","+soko.getY())));
-                if(level.getBoard().get(soko.getY()).get(soko.getX() - 1) =='@')
-                {
-                    action.setEffects(new Clause(new SokoPredicate("clearAt","",(soko.getX())+","+soko.getY()),new SokoPredicate("sokobanAt","",(soko.getX()-1)+","+soko.getY())
-                            ,new SokoPredicate("boxAt","?",(soko.getX()-2)+","+soko.getY())));
+                action.setEffects(new Clause(new SokoPredicate("clearAt","",(soko.getX())+","+soko.getY()),new SokoPredicate("sokobanAt","",(soko.getX()-1)+","+soko.getY())));
                     soko.setX(soko.getX()-1);
                     break;
-                }
-                else
-                {
-                    action.setEffects(new Clause(new SokoPredicate("clearAt","",(soko.getX())+","+soko.getY()),new SokoPredicate("sokobanAt","",(soko.getX()-1)+","+soko.getY())));
-                    soko.setX(soko.getX()-1);
-                    break;
-                }
+
             }
             case("up"):
             {
                 action.setPreconditions(new Clause(new SokoPredicate("clearAt","",(soko.getX())+","+(soko.getY()-1))));    //clear(target)
-                if(level.getBoard().get(soko.getY()-1).get(soko.getX()) =='@')
-                {
-                    action.setEffects(new Clause(new SokoPredicate("clearAt","",(soko.getX())+","+soko.getY()),new SokoPredicate("sokobanAt","",soko.getX()+","+(soko.getY()-1))
-                            ,new SokoPredicate("boxAt","?",soko.getX()+","+(soko.getY()-2))));
-                    soko.setY(soko.getY()-1);
-                    break;
-                }
-                else
-                {
                     action.setEffects(new Clause(new SokoPredicate("clearAt","",(soko.getX())+","+soko.getY()),new SokoPredicate("sokobanAt","",soko.getX()+","+(soko.getY()-1))));
                     soko.setY(soko.getY()-1);
                     break;
-                }
+
             }
             case("down"):
             {
                 action.setPreconditions(new Clause(new SokoPredicate("clearAt","",(soko.getX())+","+(soko.getY()+1))));    //clear(target)
-                if(level.getBoard().get(soko.getY()+1).get(soko.getX()) =='@')
-                {
-                    action.setEffects(new Clause(new SokoPredicate("clearAt","",(soko.getX())+","+soko.getY()),new SokoPredicate("sokobanAt","",soko.getX()+","+(soko.getY()+1))
-                            ,new SokoPredicate("boxAt","?",soko.getX()+","+(soko.getY()+2))));
-                    soko.setY(soko.getY()+1);
-                    break;
-                }
-                else
-                {
                     action.setEffects(new Clause(new SokoPredicate("clearAt","",(soko.getX())+","+soko.getY()),new SokoPredicate("sokobanAt","",soko.getX()+","+(soko.getY()-1))));
                     soko.setY(soko.getY()+1);
                     break;
-                }
+
             }
         }
         return action;
@@ -344,4 +357,15 @@ public class SokobanPlannable implements Plannable {
         return null;
     }
 
+    public void updateLevel(List<SearchAction> actions)
+    {
+        System.out.println("UPDATING INTERNAL LEVEL:");
+        for (SearchAction act:actions) {
+
+            mySokobanPolicy.Move(act.getAct());
+            mySokobanPolicy.setPlayer();
+        }
+        this.level=mySokobanPolicy.getLvl();
+        display.display();
+    }
 }

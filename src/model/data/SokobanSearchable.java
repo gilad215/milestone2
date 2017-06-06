@@ -35,6 +35,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
 
     @Override
     public HashMap<SearchAction, State> getAllPossibleMoves(State s) {
+        moves.clear();
         Point point=(Point)s.getState();
         System.out.println("looking for states around: "+point.toString()+"Which is: "+level.getBoard().get(point.getY()).get(point.getX()).toString());
 
@@ -117,7 +118,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
             }
 
         }
-        else
+        else //soko
         {
             switch (level.getBoard().get(point.getY()).get(point.getX() - 1)) //Checks Left of State
             {
@@ -206,6 +207,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
                 }
             }
         }
+        System.out.println(moves.toString());
             return moves;
 
 

@@ -1,10 +1,13 @@
 package strips;
 
+import java.util.HashSet;
+
 public class Action extends Predicate{
 
     private String act;
 
-    private Clause preconditions,effects;
+    private Clause effects=null;
+    private Clause preconditions=null;
 
     public Action(String type, String id, String value) {
         super(type, id, value);
@@ -21,6 +24,10 @@ public class Action extends Predicate{
     }
 
     public Clause getEffects() {
+        if(effects==null)
+        {
+            effects=new Clause();
+        }
         return effects;
     }
 
@@ -40,7 +47,12 @@ public class Action extends Predicate{
 
         return Integer.parseInt(arr[1]);
     }
-
+    @Override
+    public String toString(){
+        if(getPreconditions()!=null)
+        return "PRE:"+getPreconditions().toString()+" EFF:"+getEffects().toString();
+        else return " EFF:"+getEffects().toString();
+    }
 
 
 

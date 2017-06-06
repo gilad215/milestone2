@@ -3,14 +3,16 @@ package searchLib.data;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
 
 public class BFS<T> extends CommonSearcher<T>{
-    protected PriorityQueue<State> openList;
+    protected ArrayBlockingQueue<State> openList;
     private int evaluatedNodes=0;
 
     @Override
     public Solution search(Searchable<T> s) {
-        openList=new PriorityQueue<>();
+        openList=new ArrayBlockingQueue<State>(50);
         openList.add(s.getInitialState());
         HashSet<State> closedSet=new HashSet<>();
         int iteration=0;
@@ -23,12 +25,13 @@ public class BFS<T> extends CommonSearcher<T>{
             System.out.println("openList size:"+openList.size()+": "+openList.toString());
             System.out.println("closedList size:"+closedSet.size()+": "+closedSet.toString());
             State<T> n=popOpenList();//hi
+            System.out.println("ADDING "+n.getState().toString()+" TO CLOSED LIST");
             closedSet.add(n);
-            //System.out.println("CLOSED SET SIZE: "+closedSet.size());
+            System.out.println("N IS:"+n.getState().toString()+"GOAL IS:"+s.getGoalState().getState().toString());
             if(n.equals(s.getGoalState()))
             {
                 System.out.println("FOUND GOAL");
-                if(!n.getCameFrom().getState().toString().isEmpty()) System.out.println("CAME FROM: "+n.getCameFrom().toString());
+                //if(!n.getCameFrom().getState().toString().isEmpty()) System.out.println("CAME FROM: "+n.getCameFrom().toString());
                 sol=backTrace(n);
                 return sol;
             }
@@ -61,7 +64,6 @@ public class BFS<T> extends CommonSearcher<T>{
                             }
                         }
                     }
-
                 }
             }
         }

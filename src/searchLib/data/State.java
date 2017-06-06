@@ -2,7 +2,7 @@ package searchLib.data;
 
 public class State<T> implements Comparable<State<T>> {
     private T state;
-    private int cost;
+    private int cost=0;
     private State<T> cameFrom;
     private SearchAction action;
 
