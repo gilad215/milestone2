@@ -12,7 +12,7 @@ public class BFS<T> extends CommonSearcher<T>{
 
     @Override
     public Solution search(Searchable<T> s) {
-        openList=new ArrayBlockingQueue<State>(50);
+        openList=new ArrayBlockingQueue<State>(210);
         openList.add(s.getInitialState());
         HashSet<State> closedSet=new HashSet<>();
         int iteration=0;
