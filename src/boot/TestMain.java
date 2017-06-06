@@ -32,7 +32,14 @@ public class TestMain {
 
         SokobanPlannable plannable=new SokobanPlannable(loader.getLvl());
         List<Action> actions=plannable.getSatisfyingActions(p);
-        System.out.println(actions.toString());
+        int i=0;
+        for (Action a:actions) {
+            System.out.println("ACTION:"+i++);
+            System.out.println("PRECONDITIONS:"+a.getPreconditions().toString());
+            System.out.println("EFFECTS:"+a.getEffects().toString());
+            System.out.println("~~~~~~~~~~~~~~~");
+
+        }
         //Planner planner=new strips();
         //System.out.println(plannable.getGoal().toString());
         //List<Action> actions= planner.plan(plannable);
