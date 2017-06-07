@@ -56,7 +56,7 @@ public class strips implements Planner
                             stack.push(action);
                             continue;
                         }
-                    System.out.println("COMPLEX GOAL WE GUCCI BOYS");
+                    System.out.println("COMPLEX GOAL WE GUCCI BOYS "+predicate.toString());
                         List<Action> actions=null;
                         actions= plannable.getSatisfyingActions(predicate);
                         if(actions!=null) {
@@ -72,6 +72,13 @@ public class strips implements Planner
                                 stack.push(tempstack.pop());
                             }
                             System.out.println("STACK SIZE:"+stack.size());
+                        }
+                        else
+                        {
+                            System.out.println("DIDNT FIND SATISFYING ACTIONS, TRYING TO SWAP GOALS...");
+                            Predicate swap=stack.pop();
+                            stack.push(predicate);
+                            stack.push(swap);
                         }
                     }
 
