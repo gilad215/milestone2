@@ -4,7 +4,7 @@ import java.util.HashSet;
 
 public class Action extends Predicate{
 
-    private String act;
+    private String act=null;
 
     private Clause effects=null;
     private Clause preconditions=null;

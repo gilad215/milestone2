@@ -24,30 +24,40 @@ public class strips implements Planner
              */
     @Override
     public List<Action> plan(Plannable plannable) {
-        LinkedList<Action> plan = new LinkedList<Action>();
-        this.plannable = plannable;
-        Stack<Predicate> stack = new Stack<Predicate>();
-        Stack<Predicate> tempstack=new Stack<Predicate>();
-        //System.out.println("GOALS TO SATISFY:"+plannable.getGoal().toString());
+
+        Stack<Predicate> stack = new Stack<>();
+        Stack<Predicate> tempstack=new Stack<>();
+        Predicate knowledgeBase = plannable.getKnowledgeBase();
+        LinkedList<Action> plan = new LinkedList<>(); // This will act as an ordinary queue (FIFO).
         stack.push(plannable.getGoal());
-        while (!stack.isEmpty()) {
-            Predicate top = stack.peek();
-            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~CURRENT STACK PEEK:"+top.toString());
-            if (!(top instanceof Action)) {
-                if (!plannable.getKnowledgeBase().satisfies(top)) {
-                    if (top instanceof Clause) {
-                        System.out.println("CLAUSE POPPED");
-                        for (Predicate p : ((Clause) top).predicates) {
-                            if(!plannable.getKnowledgeBase().satisfies(p)) stack.push(p);
-                        }
-                    }
-                    else // single unsatisfied
+        while(!stack.isEmpty())
+        {
+            Predicate predicate = stack.pop();
+
+            if(predicate instanceof Action)
+            {
+                Action a = (Action)predicate;
+                plannable.getKnowledgeBase().update(a.getEffects());
+                plan.add(a);
+                continue;
+            }
+                if(!plannable.getKnowledgeBase().satisfies(predicate)) //unsatisfied predicate
+                {
+                    if(predicate instanceof Clause) //top is a clause
                     {
-                        Predicate reserve=null;
-                        if(!stack.isEmpty()) reserve=stack.peek();
-                        System.out.println("UNSATISFIED PREDICATE IN STRIPS:"+top.toString());
+                        for(Predicate pr : ((Clause) predicate).getPredicates()) stack.push(pr);
+                        continue;
+                    }
+
+                    if(predicate.getType().equals("clearAt")) //simple unsatisfied predicate
+                        {
+                            Action action=plannable.getSatisfyingAction(predicate);
+                            stack.push(action);
+                            continue;
+                        }
+                    System.out.println("COMPLEX GOAL WE GUCCI BOYS");
                         List<Action> actions=null;
-                         actions= plannable.getSatisfyingActions(top);
+                        actions= plannable.getSatisfyingActions(predicate);
                         if(actions!=null) {
                             System.out.println("FOUND SATISFYING ACTIONS IN STRIPS");
                             for (Action action : actions) {
@@ -62,32 +72,106 @@ public class strips implements Planner
                             }
                             System.out.println("STACK SIZE:"+stack.size());
                         }
-                        else {
-                            if (!stack.isEmpty()) {
-                                System.out.println("Could not satisfy Goal, trying to swap goals");
-                                System.out.println("Trying to SOLVE:" + reserve.toString() + " Instead");
-                                stack.pop();
-                                stack.push(top);
-                                stack.push(reserve);
-                            }
-                        }
-
                     }
-                } else {
-                    System.out.println("Predicate is satisfied! popping out!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    stack.pop();
+
                 }
 
-            } else {
-                System.out.println("POPPED ACTION OUT!~~~~~~~~~~~~~~~!~#!!$@#%#$^$&%*&#$^#$%@#$@#$@#&$^%*^%&");
-                Action a = (Action) stack.pop();
-                plannable.getKnowledgeBase().update(a.getEffects());
-                plan.add(a);
+                return plan;
+                }
+
             }
 
 
-        }
-        return plan;
-    }
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //        LinkedList<Action> plan = new LinkedList<Action>();
+//        this.plannable = plannable;
+//        Stack<Predicate> stack = new Stack<Predicate>();
+//        Stack<Predicate> tempstack=new Stack<Predicate>();
+//        //System.out.println("GOALS TO SATISFY:"+plannable.getGoal().toString());
+//        stack.push(plannable.getGoal());
+//        while (!stack.isEmpty()) {
+//            Predicate top = stack.peek();
+//            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~CURRENT STACK PEEK:"+top.toString());
+//            if (!(top instanceof Action)) {
+//                if (!plannable.getKnowledgeBase().satisfies(top)) {
+//                    if (top instanceof Clause) {
+//                        System.out.println("CLAUSE POPPED");
+//                        for (Predicate p : ((Clause) top).predicates) {
+//                            if(!plannable.getKnowledgeBase().satisfies(p)) stack.push(p);
+//                        }
+//                    }
+//                    else // single unsatisfied
+//                    {
+//                        Predicate reserve=null;
+//                        if(!stack.isEmpty()) reserve=stack.peek();
+//                        System.out.println("UNSATISFIED PREDICATE IN STRIPS:"+top.toString());
+//
+//                        if(top.getType().equals("clearAt"))
+//                        {
+//                            Action action=plannable.getSatisfyingAction(top);
+//                            stack.pop();
+//                            stack.push(action);
+//                        }
+//
+//                        List<Action> actions=null;
+//                         actions= plannable.getSatisfyingActions(top);
+//                        if(actions!=null) {
+//                            System.out.println("FOUND SATISFYING ACTIONS IN STRIPS");
+//                            for (Action action : actions) {
+//                                tempstack.push(action);
+//                                System.out.println("PUSHING TO STACK:"+action.toString());
+//                                if(action.getPreconditions()!=null)
+//                                tempstack.push(action.getPreconditions());
+//                            }
+//                            while(!tempstack.isEmpty())
+//                            {
+//                                stack.push(tempstack.pop());
+//                            }
+//                            System.out.println("STACK SIZE:"+stack.size());
+//                        }
+//                        else {
+//                            if (!stack.isEmpty()) {
+//                                System.out.println("Could not satisfy Goal, trying to swap goals");
+//                                System.out.println("Trying to SOLVE:" + reserve.toString() + " Instead");
+//                                stack.pop();
+//                                stack.push(top);
+//                                stack.push(reserve);
+//                            }
+//                        }
+//
+//                    }
+//                } else {
+//                    System.out.println("Predicate is satisfied! popping out!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//                    stack.pop();
+//                }
+//
+//            } else {
+//                System.out.println("POPPED ACTION OUT!");
+//                Action a = (Action) stack.pop();
+//                plannable.getKnowledgeBase().update(a.getEffects());
+//                plan.add(a);
+//            }
+//
+//
+//        }
+//        return plan;
+//    }
+
 

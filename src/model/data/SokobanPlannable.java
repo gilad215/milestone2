@@ -13,15 +13,14 @@ import java.util.concurrent.FutureTask;
 public class SokobanPlannable implements Plannable {
 
     private Level level;
-    private Clause goals;
     private Clause kb;
-    private SokoPredicate Player;
+    private Clause goals;
     private int boxCount=0;
     private int goalCount=0;
     private MySokobanPolicy mySokobanPolicy;
     private MySokobanDisplay display;
-    private MySokobanSaver saver;
     private Solution finale=new Solution();
+    private Point initialSoko;
 
 
 
@@ -30,7 +29,7 @@ public class SokobanPlannable implements Plannable {
         this.level=lvl;
         mySokobanPolicy=new MySokobanPolicy(this.level);
         display=new MySokobanDisplay(this.level);
-        saver=new MySokobanSaver(this.level,"C:\\Users\\G-lad\\IdeaProjects\\milestone2\\Extras\\levelplannable.txt");
+        //saver=new MySokobanSaver(this.level,"C:\\Users\\G-lad\\IdeaProjects\\milestone2\\Extras\\levelplannable.txt");
         kb=new Clause(null);
 
         if(!level.getBoard().isEmpty()) {
@@ -46,7 +45,7 @@ public class SokobanPlannable implements Plannable {
                             break;
                         case 'A': {
                             kb.add(new SokoPredicate("sokobanAt", "", j + "," + i));
-                            this.Player = new SokoPredicate("soko", "", j + "," + i);
+                            initialSoko=new Point(j,i);
                             break;
                         }
                         case '@':
@@ -91,14 +90,6 @@ public class SokobanPlannable implements Plannable {
     @Override
     public List<Action> getSatisfyingActions(Predicate top) {
         Predicate a=top;
-        if(Objects.equals(a.getType(), "clearAt"))
-        {
-            List<Action> zubi=new ArrayList<Action>();
-            Action act=new Action();
-            act.getEffects().add(top);
-            zubi.add(act);
-            return zubi;
-        }
         ArrayList<Point> boxes=new ArrayList<>();
         for (int i = 0; i < level.getBoard().size(); i++) {
             for (int j = 0; j < level.getBoard().get(i).size(); j++) {
@@ -187,8 +178,7 @@ public class SokobanPlannable implements Plannable {
             System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             List<Action> actions=new ArrayList<>();
 
-            Point sokobanPos=getSoko();
-
+            Point sokobanPos=initialSoko;
             for (SearchAction sAction:sokoActions) { //soko path
 
 
@@ -272,7 +262,9 @@ public class SokobanPlannable implements Plannable {
 
     @Override
     public Action getSatisfyingAction(Predicate top) {
-        return null;
+        Action act=new Action();
+        act.setEffects(new Clause(top));
+        return act;
     }
 
     public Action newAction(Point soko,String move)
@@ -286,6 +278,7 @@ public class SokobanPlannable implements Plannable {
                 action.setPreconditions(new Clause(new SokoPredicate("clearAt","",(soko.getX()+1)+","+soko.getY())));
                     action.setEffects(new Clause(new SokoPredicate("clearAt","",(soko.getX())+","+soko.getY()),new SokoPredicate("sokobanAt","",(soko.getX()+1)+","+soko.getY())));
                     soko.setX(soko.getX()+1);
+                    action.setAct(move);
                     break;
 
             }
@@ -294,7 +287,8 @@ public class SokobanPlannable implements Plannable {
                 action.setPreconditions(new Clause(new SokoPredicate("clearAt","",(soko.getX()-1)+","+soko.getY())));
                 action.setEffects(new Clause(new SokoPredicate("clearAt","",(soko.getX())+","+soko.getY()),new SokoPredicate("sokobanAt","",(soko.getX()-1)+","+soko.getY())));
                     soko.setX(soko.getX()-1);
-                    break;
+                action.setAct(move);
+                break;
 
             }
             case("up"):
@@ -302,7 +296,8 @@ public class SokobanPlannable implements Plannable {
                 action.setPreconditions(new Clause(new SokoPredicate("clearAt","",(soko.getX())+","+(soko.getY()-1))));    //clear(target)
                     action.setEffects(new Clause(new SokoPredicate("clearAt","",(soko.getX())+","+soko.getY()),new SokoPredicate("sokobanAt","",soko.getX()+","+(soko.getY()-1))));
                     soko.setY(soko.getY()-1);
-                    break;
+                action.setAct(move);
+                break;
 
             }
             case("down"):
@@ -310,7 +305,8 @@ public class SokobanPlannable implements Plannable {
                 action.setPreconditions(new Clause(new SokoPredicate("clearAt","",(soko.getX())+","+(soko.getY()+1))));    //clear(target)
                     action.setEffects(new Clause(new SokoPredicate("clearAt","",(soko.getX())+","+soko.getY()),new SokoPredicate("sokobanAt","",soko.getX()+","+(soko.getY()-1))));
                     soko.setY(soko.getY()+1);
-                    break;
+                action.setAct(move);
+                break;
 
             }
         }
