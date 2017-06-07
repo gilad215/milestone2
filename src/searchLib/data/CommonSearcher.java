@@ -10,13 +10,20 @@ public abstract class CommonSearcher<T> implements Searcher<T> {
 
     protected Solution backTrace(State<T> goalState)
     {
-        LinkedList<SearchAction> actions=new LinkedList<>();
+        LinkedList<SearchAction> actions=null;
         State<T> currState=goalState;
-        while(currState.getCameFrom()!=null)
+        if(currState.getCameFrom()!=null)
         {
-            System.out.println("Goal has Trace");
-            actions.addFirst(currState.getAction());
-            currState=currState.getCameFrom();
+            actions=new LinkedList<>();
+            while(currState.getCameFrom()!=null) {
+                System.out.println("Goal has Trace");
+                actions.addFirst(currState.getAction());
+                currState = currState.getCameFrom();
+            }
+        }
+        else
+        {
+            System.out.println("INITIAL AND GOAL ARE SAME, RETURNING 0 ACTIONS");
         }
         Solution sol=new Solution();
         sol.setActions(actions);

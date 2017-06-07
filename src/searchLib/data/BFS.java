@@ -43,7 +43,6 @@ public class BFS<T> extends CommonSearcher<T>{
                 {
                     state.setCameFrom(n);
                     state.setAction(act);
-
                     openList.add(state);
 
 

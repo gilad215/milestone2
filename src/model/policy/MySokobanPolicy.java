@@ -151,7 +151,6 @@ public class MySokobanPolicy implements Policy {
                     case ("right"): {
                         //System.out.println("Moving Right...");
                         char DesiredSpot = lvl.getBoard().get(playerY).get(playerX + 1);
-                        System.out.println("DESIRED SPOT IS:"+lvl.getBoard().get(playerY).get(playerX-1).toString());
                         switch (DesiredSpot) {
                             case ('#'):
                             {
