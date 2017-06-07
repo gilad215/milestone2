@@ -120,8 +120,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
         }
         else //soko
         {
-            System.out.println("SOKO IS HERE BOYASSSSSSS LETS GOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-            display.display();
+            //display.display();
             switch (level.getBoard().get(point.getY()).get(point.getX() - 1)) //Checks Left of State
             {
                 case (' '): {
@@ -130,7 +129,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
                     break;
                 }
                 case ('@'): {
-                    if (!(level.getBoard().get(point.getY()).get(point.getX() - 2).equals('@') && !level.getBoard().get(point.getY()).get(point.getX() - 2).equals('#'))) {
+                    if (!(level.getBoard().get(point.getY()).get(point.getX() - 2).equals('@')) && !(level.getBoard().get(point.getY()).get(point.getX() - 2).equals('#'))) {
                         State<Point> possibleState = new State<>(new Point(point.getX() - 1, point.getY()));
                         moves.put(new SearchAction("left"), possibleState);
                     }
@@ -175,7 +174,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
                     break;
                 }
                 case ('@'): {
-                    if (!(level.getBoard().get(point.getY() - 2).get(point.getX()).equals('@') && level.getBoard().get(point.getY() - 2).get(point.getX()).equals('#'))) {
+                    if (!(level.getBoard().get(point.getY() - 2).get(point.getX()).equals('@')) && !(level.getBoard().get(point.getY() - 2).get(point.getX()).equals('#'))) {
                         State<Point> possibleState = new State<>(new Point(point.getX(), point.getY() - 1));
                         moves.put(new SearchAction("up"), possibleState);
                     }
@@ -196,7 +195,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
                     break;
                 }
                 case ('@'): {
-                    if (!(level.getBoard().get(point.getY() + 2).get(point.getX()).equals('@') && level.getBoard().get(point.getY() + 2).get(point.getX()).equals('#'))) {
+                    if (!(level.getBoard().get(point.getY() + 2).get(point.getX()).equals('@')) && !(level.getBoard().get(point.getY() + 2).get(point.getX()).equals('#'))) {
                         State<Point> possibleState = new State<>(new Point(point.getX(), point.getY() + 1));
                         moves.put(new SearchAction("down"), possibleState);
                     }
