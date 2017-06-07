@@ -37,6 +37,7 @@ public class strips implements Planner
             if(predicate instanceof Action)
             {
                 Action a = (Action)predicate;
+                System.out.println("Action popped, updating KB");
                 plannable.getKnowledgeBase().update(a.getEffects());
                 plan.add(a);
                 continue;

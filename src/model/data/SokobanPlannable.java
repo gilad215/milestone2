@@ -215,6 +215,7 @@ public class SokobanPlannable implements Plannable {
             //goalcomplete.setPreconditions(new Clause(new SokoPredicate("clearAt","",top.getValue())));
             goalcomplete.setEffects(new Clause(new SokoPredicate("boxAt","?",top.getValue())));
             actions.add(goalcomplete);
+            finale.getActions().clear();
             return actions;
         }
 
