@@ -16,12 +16,12 @@ public class SokobanSearchable<T> implements Searchable<T> {
     private String type;
     private State<Point> initial;
     private State<Point> goal;
-
+    private MySokobanDisplay display;
 
     HashMap<SearchAction,State> moves=new HashMap<>();
 
 
-    public SokobanSearchable(Level l,String Type,Point initial,Point goal){this.level=l;this.goal=new State<>(goal);this.initial=new State<>(initial);setType(Type);}
+    public SokobanSearchable(Level l,String Type,Point initial,Point goal){this.level=l;this.goal=new State<>(goal);this.initial=new State<>(initial);setType(Type);display=new MySokobanDisplay(level);}
 
     @Override
     public State getInitialState() {
@@ -120,6 +120,8 @@ public class SokobanSearchable<T> implements Searchable<T> {
         }
         else //soko
         {
+            System.out.println("SOKO IS HERE BOYASSSSSSS LETS GOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+            display.display();
             switch (level.getBoard().get(point.getY()).get(point.getX() - 1)) //Checks Left of State
             {
                 case (' '): {
@@ -128,7 +130,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
                     break;
                 }
                 case ('@'): {
-                    if (!(level.getBoard().get(point.getY()).get(point.getX() - 2).equals('@') || level.getBoard().get(point.getY()).get(point.getX() - 2).equals('#'))) {
+                    if (!(level.getBoard().get(point.getY()).get(point.getX() - 2).equals('@') && !level.getBoard().get(point.getY()).get(point.getX() - 2).equals('#'))) {
                         State<Point> possibleState = new State<>(new Point(point.getX() - 1, point.getY()));
                         moves.put(new SearchAction("left"), possibleState);
                     }
@@ -150,11 +152,12 @@ public class SokobanSearchable<T> implements Searchable<T> {
                     break;
                 }
                 case ('@'): {
-                    if (!(level.getBoard().get(point.getY()).get(point.getX() + 2).equals('@') || level.getBoard().get(point.getY()).get(point.getX() + 2).equals('#'))) {
+                    if (!(level.getBoard().get(point.getY()).get(point.getX() + 2).equals('@')) && !(level.getBoard().get(point.getY()).get(point.getX() + 2).equals('#'))) {
+                        System.out.println(level.getBoard().get(point.getY()).get(point.getX() + 2));
                         State<Point> possibleState = new State<>(new Point(point.getX() + 1, point.getY()));
                         moves.put(new SearchAction("right"), possibleState);
-                        break;
                     }
+                    break;
 
                 }
                 case ('o'): {
@@ -172,11 +175,11 @@ public class SokobanSearchable<T> implements Searchable<T> {
                     break;
                 }
                 case ('@'): {
-                    if (!(level.getBoard().get(point.getY() - 2).get(point.getX()).equals('@') || level.getBoard().get(point.getY() - 2).get(point.getX()).equals('#'))) {
+                    if (!(level.getBoard().get(point.getY() - 2).get(point.getX()).equals('@') && level.getBoard().get(point.getY() - 2).get(point.getX()).equals('#'))) {
                         State<Point> possibleState = new State<>(new Point(point.getX(), point.getY() - 1));
                         moves.put(new SearchAction("up"), possibleState);
-                        break;
                     }
+                    break;
                 }
                 case ('o'): {
                     State<Point> possibleState = new State<>(new Point(point.getX(), point.getY() - 1));
@@ -193,11 +196,11 @@ public class SokobanSearchable<T> implements Searchable<T> {
                     break;
                 }
                 case ('@'): {
-                    if (!(level.getBoard().get(point.getY() + 2).get(point.getX()).equals('@') || level.getBoard().get(point.getY() + 2).get(point.getX()).equals('#'))) {
+                    if (!(level.getBoard().get(point.getY() + 2).get(point.getX()).equals('@') && level.getBoard().get(point.getY() + 2).get(point.getX()).equals('#'))) {
                         State<Point> possibleState = new State<>(new Point(point.getX(), point.getY() + 1));
                         moves.put(new SearchAction("down"), possibleState);
-                        break;
                     }
+                    break;
                 }
                 case ('o'): {
                     State<Point> possibleState = new State<>(new Point(point.getX(), point.getY() + 1));

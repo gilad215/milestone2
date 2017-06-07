@@ -75,7 +75,7 @@ public class strips implements Planner
                         }
                         else
                         {
-                            System.out.println("DIDNT FIND SATISFYING ACTIONS, TRYING TO SWAP GOALS...");
+                            System.out.println("DIDNT FIND SATISFYING ACTIONS, TRYING TO SWAP GOALS ORDER...");
                             Predicate swap=stack.pop();
                             stack.push(predicate);
                             stack.push(swap);

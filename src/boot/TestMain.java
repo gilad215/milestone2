@@ -20,7 +20,7 @@ public class TestMain {
         SokoPredicate p3 = new SokoPredicate("boxAt", "?", "6,3");
 
 
-        MySokobanLoader loader = new MySokobanLoader("C:\\Users\\G-lad\\IdeaProjects\\milestone2\\Extras\\levelbfs.txt");
+        MySokobanLoader loader = new MySokobanLoader("C:\\Users\\G-lad\\IdeaProjects\\milestone2\\Extras\\levelg.txt");
         loader.load();
 //        SokobanPlannable sokobanPlannable=new SokobanPlannable(loader.getLvl());
 //        Clause goals=sokobanPlannable.getGoal();
