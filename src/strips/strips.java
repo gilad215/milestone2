@@ -2,7 +2,6 @@ package strips;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.Stack;
 
 public class strips implements Planner
@@ -76,9 +75,11 @@ public class strips implements Planner
                         else
                         {
                             System.out.println("DIDNT FIND SATISFYING ACTIONS, TRYING TO SWAP GOALS ORDER...");
-                            Predicate swap=stack.pop();
-                            stack.push(predicate);
-                            stack.push(swap);
+                            if(!stack.isEmpty()) {
+                                Predicate swap = stack.pop();
+                                stack.push(predicate);
+                                stack.push(swap);
+                            }
                         }
                     }
 

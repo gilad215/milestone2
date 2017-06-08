@@ -1,6 +1,6 @@
 package strips;
 
-public class SokoPredicate extends Predicate{
+public class SokoPredicate extends Predicate {
 
 
     public SokoPredicate(String type, String id, String value) {

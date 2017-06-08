@@ -1,8 +1,6 @@
 package strips;
 
-import java.util.HashSet;
-
-public class Action extends Predicate{
+public class Action extends Predicate {
 
     private String act=null;
 

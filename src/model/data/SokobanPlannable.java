@@ -1,14 +1,12 @@
 package model.data;
 
 import model.policy.MySokobanPolicy;
-import searchLib.data.BFS;
-import searchLib.data.SearchAction;
-import searchLib.data.Solution;
+import searchLib.BFS;
+import searchLib.SearchAction;
+import searchLib.Solution;
 import strips.*;
 
 import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
 
 public class SokobanPlannable implements Plannable {
 
@@ -103,8 +101,9 @@ public class SokobanPlannable implements Plannable {
         for (Point box:boxes) {
             System.out.println("Searching for GOAL on X:"+a.getX()+" Y:"+a.getY());
             Solution boxPath=Path("boxAt",box,new Point(a.getX(),a.getY()));
-            System.out.println("WE HAVE A SOLUTION IN HAND ~~~~~~~~~~~~~~~~~~~~~~");
            if(boxPath!=null) {
+               System.out.println("WE HAVE A SOLUTION IN HAND ~~~~~~~~~~~~~~~~~~~~~~");
+               System.out.println(boxPath.toString());
                Point finalbox=box;
                Point sokoPos=getSoko();
                for (Object searchAction:boxPath.getActions()) {
@@ -134,7 +133,7 @@ public class SokobanPlannable implements Plannable {
                        }
                    }
                    Solution sokoPath = Path("sokobanAt", getSoko(), boxPush);
-                   if (sokoPath.getActions()!=null) {
+                   if (sokoPath.getSokoflag()==0) {
                        System.out.println("TO GET TO:"+boxPush.toString()+" WE DO:"+sokoPath.getActions().toString());
                        ArrayList<SearchAction> lvlupdate=new ArrayList<>();
                        lvlupdate.addAll(sokoPath.getActions());
@@ -143,7 +142,6 @@ public class SokobanPlannable implements Plannable {
                        sokoSolution.addToActions(sokoPath.getActions());
                        sokoSolution.addToActions(action);
                        System.out.println("SOLUTION SO FAR:"+sokoSolution.getActions().toString());
-                       System.out.println("BOX IS NOW ON");
                        System.out.println("SOKOBAN IS NOW HERE:"+getSoko().toString()+"<<<------------------------------------------");
                        finale.addToActions(sokoSolution.getActions());
                        sokoSolution.getActions().clear();
@@ -225,7 +223,7 @@ public class SokobanPlannable implements Plannable {
     private Solution Path(String type,Point initial, Point target)
     {
         SokobanSearchable<Point> Search = null;
-        Solution path=new Solution();
+        Solution path=null;
         System.out.println("TYPE OF SEARCH IS:"+type);
         System.out.println("GOAL IS:"+target.toString());
         if (type.equals("boxAt")){
@@ -240,24 +238,6 @@ public class SokobanPlannable implements Plannable {
         if (Search != null) {
             path = searcher.search(Search);
         }
-        //System.out.println("DEBUGGGGG"+path.toString());
-        //if(!path.getActions().isEmpty()) return path;
-//        if(type.equals("sokobanAt"))
-//        {
-//            mySokobanPolicy=new MySokobanPolicy(level);
-//            display=new MySokobanDisplay(mySokobanPolicy.getLvl());
-//            display.display();
-//            for (Object act:path.getActions()) {
-//                SearchAction action=(SearchAction)act;
-//                System.out.println("MOVING "+action.getAct());
-//                mySokobanPolicy.Move(action.getAct());
-//                display.display();
-//            }
-//            this.level=mySokobanPolicy.getLvl();
-//
-//
-//            }
-
         return path;
     }
 

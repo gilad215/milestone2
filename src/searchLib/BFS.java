@@ -1,18 +1,17 @@
-package searchLib.data;
+package searchLib;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
-public class BFS<T> extends CommonSearcher<T>{
-    protected ArrayBlockingQueue<State> openList;
+public class BFS<T> extends CommonSearcher<T> {
+    protected PriorityQueue<State> openList;
     private int evaluatedNodes=0;
 
     @Override
     public Solution search(Searchable<T> s) {
-        openList=new ArrayBlockingQueue<State>(210);
+        openList=new PriorityQueue<>();
         openList.add(s.getInitialState());
         HashSet<State> closedSet=new HashSet<>();
         int iteration=0;
@@ -35,7 +34,7 @@ public class BFS<T> extends CommonSearcher<T>{
                 sol=backTrace(n);
                 return sol;
             }
-            HashMap<SearchAction,State<T>> map=s.getAllPossibleMoves(n);
+            HashMap<SearchAction, State<T>> map=s.getAllPossibleMoves(n);
             System.out.println("POSSIBLE MOVES: "+map);
             for (SearchAction act:map.keySet()) {
                 State<T> state=map.get(act);
@@ -44,26 +43,17 @@ public class BFS<T> extends CommonSearcher<T>{
                     state.setCameFrom(n);
                     state.setAction(act);
                     openList.add(state);
-
-
                 }
-                else
-                {
-                    if(!closedSet.contains(state)) {
-                        System.out.println("Entered ELSE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                        State<T> temp = null;
-                        for (State<T> f : openList) {
-                            if (f.equals(state)) {
-                                temp = new State(f);
-                                break;
-                            }
-                            if (temp != null && state.getCost() < temp.getCost()) {
-                                openList.remove(temp);
-                                openList.add(state);
-                            }
-                        }
+                else {
+                    if (openList.contains(state)) {
+                        State<T> temp = state;
+                        temp.setAction(act);
+                        temp.setCameFrom(n);
+                        openList.remove(state);
+                        openList.add(temp);
                     }
                 }
+
             }
         }
 

@@ -1,4 +1,4 @@
-package searchLib.data;
+package searchLib;
 
 import java.util.LinkedList;
 
@@ -12,6 +12,7 @@ public abstract class CommonSearcher<T> implements Searcher<T> {
     {
         LinkedList<SearchAction> actions=null;
         State<T> currState=goalState;
+        Solution sol=new Solution();
         if(currState.getCameFrom()!=null)
         {
             actions=new LinkedList<>();
@@ -20,13 +21,14 @@ public abstract class CommonSearcher<T> implements Searcher<T> {
                 actions.addFirst(currState.getAction());
                 currState = currState.getCameFrom();
             }
+            sol.setActions(actions);
         }
         else
         {
             System.out.println("INITIAL AND GOAL ARE SAME, RETURNING 0 ACTIONS");
+            sol.setSokoflag(1);
         }
-        Solution sol=new Solution();
-        sol.setActions(actions);
+
         return sol;
     }
 }

@@ -1,4 +1,4 @@
-package searchLib.data;
+package searchLib;
 
 public class SearchAction {
     private String act;

@@ -1,8 +1,8 @@
-package searchLib.data;
+package searchLib;
 
 public class State<T> implements Comparable<State<T>> {
     private T state;
-    private int cost=0;
+    private int cost;
     private State<T> cameFrom;
     private SearchAction action;
 
@@ -34,6 +34,13 @@ public class State<T> implements Comparable<State<T>> {
 
     public boolean equals(State<T> s) {
         return state.equals(s.state);
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        State<T> state=(State<T>)obj;
+        return this.equals(state);
     }
 
     @Override

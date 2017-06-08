@@ -1,13 +1,8 @@
 package boot;
 
 import model.data.*;
-import searchLib.data.BFS;
-import searchLib.data.Solution;
-import strips.Clause;
-
 import strips.SokoPredicate;
 import strips.*;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,7 +15,7 @@ public class TestMain {
         SokoPredicate p3 = new SokoPredicate("boxAt", "?", "6,3");
 
 
-        MySokobanLoader loader = new MySokobanLoader("C:\\Users\\G-lad\\IdeaProjects\\milestone2\\Extras\\level2.txt");
+        MySokobanLoader loader = new MySokobanLoader("C:\\Users\\G-lad\\IdeaProjects\\milestone2\\Extras\\levelm.txt");
         loader.load();
         SokobanPlannable plannable = new SokobanPlannable(loader.getLvl());
 

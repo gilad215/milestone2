@@ -1,11 +1,13 @@
-package searchLib.data;
+package searchLib;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class Solution<T> implements Comparable<Solution> {
-    private List<SearchAction> actions=new ArrayList<>();
+    private List<SearchAction> actions=null;
+
+
+    private int sokoflag=0;
 
     public List<SearchAction> getActions() {
         return actions;
@@ -16,19 +18,22 @@ public class Solution<T> implements Comparable<Solution> {
     }
     public void addToActions(List<SearchAction> list)
     {
+        if(actions==null) actions=new ArrayList<>();
         actions.addAll(list);
     }
     public void addToActions(SearchAction act)
     {
+        if(actions==null) actions=new ArrayList<>();
         actions.add(act);
     }
 
     public int actionSize()
     {
-        if(!actions.isEmpty())
+        if(actions!=null)
         {
             return actions.size();
         }
+        System.out.println("ACTIONS IS NULL");
         return 0;
     }
 
@@ -37,12 +42,25 @@ public class Solution<T> implements Comparable<Solution> {
         return this.actionSize()-o.actionSize();
     }
 
-    public Solution(Solution a,Solution b)
+    public Solution(Solution a, Solution b)
     {
         actions.addAll(a.getActions());
         actions.addAll(b.getActions());
     }
 
     public Solution(){}
+
+    public int getSokoflag() {
+        return sokoflag;
+    }
+
+    public void setSokoflag(int sokoflag) {
+        this.sokoflag = sokoflag;
+    }
+    @Override
+    public String toString()
+    {
+        return actions.toString();
+    }
 
 }

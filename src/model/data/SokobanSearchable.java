@@ -1,8 +1,8 @@
 package model.data;
 
-import searchLib.data.SearchAction;
-import searchLib.data.Searchable;
-import searchLib.data.State;
+import searchLib.SearchAction;
+import searchLib.Searchable;
+import searchLib.State;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -25,6 +25,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
 
     @Override
     public State getInitialState() {
+        initial.setCost(0);
         return initial;
     }
 
@@ -45,6 +46,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
                 case (' '): {
                     if (clearAt(point.getX() + 1, point.getY()) || goalAt(point.getX() + 1, point.getY()) || sokoAt(point.getX() + 1, point.getY()) || equalsToInitial(new Point(point.getX() + 1, point.getY()))) {
                         State<Point> possibleState = new State<>(new Point(point.getX() - 1, point.getY()));
+                        possibleState.setCost(s.getCost()+1);
                         moves.put(new SearchAction("left"), possibleState);
                         break;
                     }
@@ -53,6 +55,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
                 case ('o'): {
                     if (clearAt(point.getX() + 1, point.getY()) || goalAt(point.getX() + 1, point.getY()) || sokoAt(point.getX() + 1, point.getY()) || equalsToInitial(new Point(point.getX() + 1, point.getY()))) {
                         State<Point> possibleState = new State<>(new Point(point.getX() - 1, point.getY()));
+                        possibleState.setCost(s.getCost()+1);
                         moves.put(new SearchAction("left"), possibleState);
                         break;
                     }
@@ -64,6 +67,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
                 case (' '): {
                     if (clearAt(point.getX() - 1, point.getY()) || goalAt(point.getX() - 1, point.getY()) || sokoAt(point.getX() - 1, point.getY()) || equalsToInitial(new Point(point.getX() - 1, point.getY()))) {
                         State<Point> possibleState = new State<>(new Point(point.getX() + 1, point.getY()));
+                        possibleState.setCost(s.getCost()+1);
                         moves.put(new SearchAction("right"), possibleState);
                         break;
                     }
@@ -72,6 +76,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
                 case ('o'): {
                     if (clearAt(point.getX() - 1, point.getY()) || goalAt(point.getX() - 1, point.getY()) || sokoAt(point.getX() - 1, point.getY()) || equalsToInitial(new Point(point.getX() - 1, point.getY()))) {
                         State<Point> possibleState = new State<>(new Point(point.getX() + 1, point.getY()));
+                        possibleState.setCost(s.getCost()+1);
                         moves.put(new SearchAction("right"), possibleState);
                         break;
                     }
@@ -83,6 +88,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
                 case (' '): {
                     if (clearAt(point.getX(), point.getY()+1) || goalAt(point.getX(), point.getY()+1) || sokoAt(point.getX(), point.getY()+1) || equalsToInitial(new Point(point.getX(), point.getY()+1))) {
                         State<Point> possibleState = new State<>(new Point(point.getX(), point.getY()-1));
+                        possibleState.setCost(s.getCost()+1);
                         moves.put(new SearchAction("up"), possibleState);
                         break;
                     }
@@ -91,6 +97,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
                 case ('o'): {
                     if (clearAt(point.getX(), point.getY()+1) || goalAt(point.getX(), point.getY()+1) || sokoAt(point.getX(), point.getY()+1) || equalsToInitial(new Point(point.getX(), point.getY()+1))) {
                         State<Point> possibleState = new State<>(new Point(point.getX(), point.getY()-1));
+                        possibleState.setCost(s.getCost()+1);
                         moves.put(new SearchAction("up"), possibleState);
                         break;
                     }
@@ -102,6 +109,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
                 case (' '): {
                     if (clearAt(point.getX(), point.getY()-1) || goalAt(point.getX(), point.getY()-1) || sokoAt(point.getX(), point.getY()-1) || equalsToInitial(new Point(point.getX(), point.getY()-1))) {
                         State<Point> possibleState = new State<>(new Point(point.getX(), point.getY()+1));
+                        possibleState.setCost(s.getCost()+1);
                         moves.put(new SearchAction("down"), possibleState);
                         break;
                     }
@@ -110,6 +118,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
                 case ('o'): {
                     if (clearAt(point.getX(), point.getY()-1) || goalAt(point.getX(), point.getY()-1) || sokoAt(point.getX(), point.getY()-1) || equalsToInitial(new Point(point.getX(), point.getY()-1))) {
                         State<Point> possibleState = new State<>(new Point(point.getX(), point.getY()+1));
+                        possibleState.setCost(s.getCost()+1);
                         moves.put(new SearchAction("down"), possibleState);
                         break;
                     }
@@ -125,18 +134,21 @@ public class SokobanSearchable<T> implements Searchable<T> {
             {
                 case (' '): {
                     State<Point> possibleState = new State<>(new Point(point.getX() - 1, point.getY()));
+                    possibleState.setCost(s.getCost()+1);
                     moves.put(new SearchAction("left"), possibleState);
                     break;
                 }
                 case ('@'): {
                     if (!(level.getBoard().get(point.getY()).get(point.getX() - 2).equals('@')) && !(level.getBoard().get(point.getY()).get(point.getX() - 2).equals('#'))) {
                         State<Point> possibleState = new State<>(new Point(point.getX() - 1, point.getY()));
+                        possibleState.setCost(s.getCost()+1);
                         moves.put(new SearchAction("left"), possibleState);
                     }
                     break;
                 }
                 case ('o'): {
                     State<Point> possibleState = new State<>(new Point(point.getX() - 1, point.getY()));
+                    possibleState.setCost(s.getCost()+1);
                     moves.put(new SearchAction("left"), possibleState);
                     break;
 
@@ -147,6 +159,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
             {
                 case (' '): {
                     State<Point> possibleState = new State<>(new Point(point.getX() + 1, point.getY()));
+                    possibleState.setCost(s.getCost()+1);
                     moves.put(new SearchAction("right"), possibleState);
                     break;
                 }
@@ -154,6 +167,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
                     if (!(level.getBoard().get(point.getY()).get(point.getX() + 2).equals('@')) && !(level.getBoard().get(point.getY()).get(point.getX() + 2).equals('#'))) {
                         System.out.println(level.getBoard().get(point.getY()).get(point.getX() + 2));
                         State<Point> possibleState = new State<>(new Point(point.getX() + 1, point.getY()));
+                        possibleState.setCost(s.getCost()+1);
                         moves.put(new SearchAction("right"), possibleState);
                     }
                     break;
@@ -161,6 +175,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
                 }
                 case ('o'): {
                     State<Point> possibleState = new State<>(new Point(point.getX() + 1, point.getY()));
+                    possibleState.setCost(s.getCost()+1);
                     moves.put(new SearchAction("right"), possibleState);
                     break;
 
@@ -170,18 +185,21 @@ public class SokobanSearchable<T> implements Searchable<T> {
             {
                 case (' '): {
                     State<Point> possibleState = new State<>(new Point(point.getX(), point.getY() - 1));
+                    possibleState.setCost(s.getCost()+1);
                     moves.put(new SearchAction("up"), possibleState);
                     break;
                 }
                 case ('@'): {
                     if (!(level.getBoard().get(point.getY() - 2).get(point.getX()).equals('@')) && !(level.getBoard().get(point.getY() - 2).get(point.getX()).equals('#'))) {
                         State<Point> possibleState = new State<>(new Point(point.getX(), point.getY() - 1));
+                        possibleState.setCost(s.getCost()+1);
                         moves.put(new SearchAction("up"), possibleState);
                     }
                     break;
                 }
                 case ('o'): {
                     State<Point> possibleState = new State<>(new Point(point.getX(), point.getY() - 1));
+                    possibleState.setCost(s.getCost()+1);
                     moves.put(new SearchAction("up"), possibleState);
                     break;
 
@@ -191,18 +209,21 @@ public class SokobanSearchable<T> implements Searchable<T> {
             {
                 case (' '): {
                     State<Point> possibleState = new State<>(new Point(point.getX(), point.getY() + 1));
+                    possibleState.setCost(s.getCost()+1);
                     moves.put(new SearchAction("down"), possibleState);
                     break;
                 }
                 case ('@'): {
                     if (!(level.getBoard().get(point.getY() + 2).get(point.getX()).equals('@')) && !(level.getBoard().get(point.getY() + 2).get(point.getX()).equals('#'))) {
                         State<Point> possibleState = new State<>(new Point(point.getX(), point.getY() + 1));
+                        possibleState.setCost(s.getCost()+1);
                         moves.put(new SearchAction("down"), possibleState);
                     }
                     break;
                 }
                 case ('o'): {
                     State<Point> possibleState = new State<>(new Point(point.getX(), point.getY() + 1));
+                    possibleState.setCost(s.getCost()+1);
                     moves.put(new SearchAction("down"), possibleState);
                     break;
 
