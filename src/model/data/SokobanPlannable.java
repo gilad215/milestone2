@@ -173,9 +173,11 @@ public class SokobanPlannable implements Plannable {
 
            }
            else System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Didnt find solution for box:" + box.toString()+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-           Solution FINALE=new Solution(finale);
-           solutions.add(FINALE);
-           finale.getActions().clear();
+           if(finale.actionSize()!=0) {
+               Solution FINALE = new Solution(finale);
+               solutions.add(FINALE);
+               finale.getActions().clear();
+           }
            this.level=new Level(backup);
            this.mySokobanPolicy=new MySokobanPolicy(this.level);
            this.display=new MySokobanDisplay(this.level);
