@@ -63,4 +63,13 @@ public class Solution<T> implements Comparable<Solution> {
         return actions.toString();
     }
 
+    public Solution(Solution s)
+    {
+        actions=new ArrayList<>(s.actionSize());
+        for (Object sa:s.getActions()) {
+            SearchAction searchAction=(SearchAction)sa;
+            actions.add(searchAction);
+        }
+    }
+
 }

@@ -101,8 +101,13 @@ public class SokobanPlannable implements Plannable {
             }
         }
         Solution sokoSolution=new Solution();
-
+        PriorityQueue<Solution> solutions=new PriorityQueue<>(10);
+        int boxcounter=1;
         for (Point box:boxes) {
+            System.out.println("~~~~~~~~~~~~~~~~~BOX NUMBER:"+boxcounter+"~~~~~~~~~~~~~~~~~~~~~~");
+            boxcounter++;
+            System.out.println("LEVEL RIGHT NOW~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            display.display();
             System.out.println("Searching for GOAL on X:"+a.getX()+" Y:"+a.getY());
             Solution boxPath=Path("boxAt",box,new Point(a.getX(),a.getY()));
            if(boxPath!=null) {
@@ -165,16 +170,23 @@ public class SokobanPlannable implements Plannable {
                        }
                    }
                }
-            break;
+
            }
            else System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Didnt find solution for box:" + box.toString()+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-
+           Solution FINALE=new Solution(finale);
+           solutions.add(FINALE);
+           finale.getActions().clear();
+           this.level=new Level(backup);
+           this.mySokobanPolicy=new MySokobanPolicy(this.level);
+           this.display=new MySokobanDisplay(this.level);
         }
 
 
-
-        if(!finale.getActions().isEmpty()) {
-            List<SearchAction> sokoActions=finale.getActions();
+        Solution SokoFinale=solutions.poll();
+        if(!SokoFinale.getActions().isEmpty()) {
+            updateLevel(SokoFinale.getActions());
+            backup=new Level(this.level);
+            List<SearchAction> sokoActions=SokoFinale.getActions();
             System.out.println("~~~~~~~~~~~~OUR FINAL ACTIONS ~~~~~~~~~~~~");
             System.out.println(sokoActions.toString());
             System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
