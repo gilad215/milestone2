@@ -185,7 +185,7 @@ public class SokobanPlannable implements Plannable {
 
 
         Solution SokoFinale=solutions.poll();
-        if(!SokoFinale.getActions().isEmpty()) {
+        if(SokoFinale!=null) {
             updateLevel(SokoFinale.getActions());
             backup=new Level(this.level);
             List<SearchAction> sokoActions=SokoFinale.getActions();
