@@ -15,7 +15,7 @@ public class TestMain {
         SokoPredicate p3 = new SokoPredicate("boxAt", "?", "6,3");
 
 
-        MySokobanLoader loader = new MySokobanLoader("C:\\Users\\G-lad\\IdeaProjects\\milestone2\\Extras\\levelm.txt");
+        MySokobanLoader loader = new MySokobanLoader("C:\\Users\\G-lad\\IdeaProjects\\milestone2\\Extras\\leveltest.txt");
         loader.load();
         SokobanPlannable plannable = new SokobanPlannable(loader.getLvl());
 

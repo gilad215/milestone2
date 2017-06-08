@@ -4,6 +4,7 @@ package model.data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class   Level implements Serializable{
 
@@ -18,10 +19,24 @@ public class   Level implements Serializable{
         System.out.println("Goals has been loaded! Number of Goals:"+getGoals().size());
     }
 
-    public Level()
-    {
+    public Level(Level l) {
+        goals = new ArrayList<>();
 
-        this.board=new ArrayList<ArrayList<Character>>();
+        for (Point p : l.getGoals()) {
+            goals.add(p);
+        }
+
+        board = new ArrayList<ArrayList<Character>>(l.getBoard().size());
+        ArrayList<Character> line=null;
+
+        for (ArrayList<Character> arr:l.getBoard()) {
+            line=new ArrayList<Character>(arr.size());
+            for (Character ch:arr) {
+                line.add(ch);
+            }
+            board.add(line);
+        }
+
     }
 
 

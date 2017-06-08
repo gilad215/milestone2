@@ -5,18 +5,21 @@ import searchLib.BFS;
 import searchLib.SearchAction;
 import searchLib.Solution;
 import strips.*;
+//import sun.security.mscapi.KeyStore;
 
 import java.util.*;
 
 public class SokobanPlannable implements Plannable {
 
     private Level level;
+    private Level backup;
     private Clause kb;
     private Clause goals;
     private int boxCount=0;
     private int goalCount=0;
     private MySokobanPolicy mySokobanPolicy;
     private MySokobanDisplay display;
+    private MySokobanDisplay backupdisplay;
     private Solution finale=new Solution();
     private Point initialSoko;
 
@@ -24,12 +27,13 @@ public class SokobanPlannable implements Plannable {
 
     public SokobanPlannable(Level lvl)
     {
-        this.level=lvl;
+        this.level=new Level(lvl);
+        this.backup=new Level(lvl);
         mySokobanPolicy=new MySokobanPolicy(this.level);
+        backupdisplay=new MySokobanDisplay(this.backup);
         display=new MySokobanDisplay(this.level);
-        //saver=new MySokobanSaver(this.level,"C:\\Users\\G-lad\\IdeaProjects\\milestone2\\Extras\\levelplannable.txt");
         kb=new Clause(null);
-
+        System.out.println(this.level.getBoard());
         if(!level.getBoard().isEmpty()) {
             System.out.println("loaded level!");
             for (int i = 0; i < level.getBoard().size(); i++) {
@@ -214,6 +218,8 @@ public class SokobanPlannable implements Plannable {
             goalcomplete.setEffects(new Clause(new SokoPredicate("boxAt","?",top.getValue())));
             actions.add(goalcomplete);
             finale.getActions().clear();
+            System.out.println(this.level.getBoard());
+            System.out.println(this.backup.getBoard());
             return actions;
         }
 
