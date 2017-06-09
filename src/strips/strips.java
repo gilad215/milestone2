@@ -26,13 +26,11 @@ public class strips implements Planner
 
         Stack<Predicate> stack = new Stack<>();
         Stack<Predicate> tempstack=new Stack<>();
-        Predicate knowledgeBase = plannable.getKnowledgeBase();
         LinkedList<Action> plan = new LinkedList<>(); // This will act as an ordinary queue (FIFO).
         stack.push(plannable.getGoal());
         while(!stack.isEmpty())
         {
             Predicate predicate = stack.pop();
-
             if(predicate instanceof Action)
             {
                 Action a = (Action)predicate;
