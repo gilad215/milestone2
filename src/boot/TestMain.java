@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TestMain {
     public static void main(String[] args) {
-        MySokobanLoader loader = new MySokobanLoader("C:\\Users\\G-lad\\IdeaProjects\\milestone2\\Extras\\level2.txt");
+        MySokobanLoader loader = new MySokobanLoader("C:\\Users\\G-lad\\IdeaProjects\\milestone2\\Extras\\level5.txt");
         loader.load();
         SokobanPlannable plannable = new SokobanPlannable(loader.getLvl());
 
@@ -27,6 +27,6 @@ public class TestMain {
         System.out.println("SIZE:"+stripsactions.size());
         System.out.println("PLANNABLE FINALE"+finalActions);
 
-
+        
     }
 }
